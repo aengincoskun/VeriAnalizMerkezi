@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmlakTrend — Gayrimenkul Fiyat Analizi</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg1:#0d1117;--bg2:#161b22;--bg3:#1c2128;--bg4:#21262d;
+      --accent:#1f6feb;--accent2:#388bfd;
+      --green:#3fb950;--red:#f85149;--yellow:#e3b341;--purple:#a371f7;--cyan:#22d3ee;
+      --t1:#e6edf3;--t2:#8b949e;--t3:#6e7681;
+      --border:#30363d;
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg1);color:var(--t1);min-height:100vh;overflow-x:hidden}
+
+    /* ── HEADER ── */
+    .hdr{
+      background:var(--bg2);border-bottom:1px solid var(--border);
+      padding:0 16px;height:56px;display:flex;align-items:center;
+      justify-content:space-between;position:sticky;top:0;z-index:200;
+    }
+    .logo{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;text-decoration:none;color:var(--t1)}
+    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#1f6feb,#0d52a6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
+    .hdr-right{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t2)}
+    .live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .hamburger{display:none;background:none;border:none;color:var(--t1);cursor:pointer;padding:6px;border-radius:6px}
+    .hamburger:hover{background:var(--bg4)}
+
+    /* ── LAYOUT ── */
+    .app{display:flex;height:calc(100vh - 56px)}
+
+    /* ── SIDEBAR ── */
+    .sidebar{
+      width:268px;background:var(--bg2);border-right:1px solid var(--border);
+      overflow-y:auto;flex-shrink:0;transition:transform .25s ease;
+    }
+    .sidebar::-webkit-scrollbar{width:4px}
+    .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+    .sb-sec{padding:14px 16px;border-bottom:1px solid var(--border)}
+    .sb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:12px}
+    .fg{margin-bottom:10px}
+    .fl{display:block;font-size:11px;color:var(--t2);margin-bottom:4px}
+    select.fs,input.fs{
+      width:100%;padding:7px 28px 7px 10px;background:var(--bg4);
+      border:1px solid var(--border);border-radius:6px;color:var(--t1);
+      font-size:13px;cursor:pointer;
+      appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%236e7681' d='M5 7L0 2h10z'/%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:right 10px center;
+      transition:border-color .15s;
+    }
+    select.fs:focus,input.fs:focus{outline:none;border-color:var(--accent)}
+    input.fs{background-image:none;padding:7px 10px}
+
+    /* toggles */
+    .ind-list{display:flex;flex-direction:column;gap:9px}
+    .ind-row{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+    .ind-row:hover .ind-name{color:var(--t1)}
+    .ind-name{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px;transition:color .15s}
+    .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .tog{width:34px;height:18px;background:var(--bg4);border:1px solid var(--border);border-radius:9px;cursor:pointer;position:relative;transition:background .2s,border-color .2s;flex-shrink:0}
+    .tog.on{background:var(--accent);border-color:var(--accent)}
+    .tog::after{content:'';position:absolute;width:12px;height:12px;background:#fff;border-radius:50%;top:2px;left:2px;transition:left .2s}
+    .tog.on::after{left:18px}
+
+    /* alerts */
+    .al-row{display:flex;gap:6px;margin-bottom:6px}
+    .al-row .fs{flex:1}
+    .btn{padding:7px 13px;border-radius:6px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:background .15s,opacity .15s;white-space:nowrap}
+    .btn-p{background:var(--accent);color:#fff}
+    .btn-p:hover{background:var(--accent2)}
+    .btn-sm{padding:5px 10px;font-size:11px}
+    .al-items{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+    .al-item{background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:7px 10px;display:flex;align-items:center;justify-content:space-between;font-size:12px;gap:6px}
+    .al-badge{padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700}
+    .al-up{background:rgba(63,185,80,.2);color:var(--green)}
+    .al-dn{background:rgba(248,81,73,.2);color:var(--red)}
+    .al-del{background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px;line-height:1;padding:0 2px}
+    .al-del:hover{color:var(--red)}
+    .al-triggered{border-color:var(--yellow)!important;animation:blink .6s 3}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+    /* ── MAIN ── */
+    .main{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+    .main::-webkit-scrollbar{width:6px}
+    .main::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+    /* ticker */
+    .ticker{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+    .ticker-title{font-size:15px;font-weight:700}
+    .ticker-sub{font-size:11px;color:var(--t2);margin-top:2px}
+    .ticker-price{font-size:26px;font-weight:800;letter-spacing:-.5px}
+    .chg{font-size:13px;font-weight:700;padding:3px 10px;border-radius:6px}
+    .chg.up{background:rgba(63,185,80,.15);color:var(--green)}
+    .chg.dn{background:rgba(248,81,73,.15);color:var(--red)}
+    .ticker-meta{font-size:11px;color:var(--t3);margin-left:auto}
+
+    /* stat cards */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .2s}
+    .card:hover{border-color:var(--accent)}
+    .card-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:6px}
+    .card-val{font-size:17px;font-weight:800}
+    .card-sub{font-size:11px;color:var(--t2);margin-top:3px}
+    .up{color:var(--green)}.dn{color:var(--red)}
+
+    /* chart controls */
+    .ctrl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .ctrl-lbl{font-size:11px;color:var(--t2)}
+    .btn-grp{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:7px;overflow:hidden}
+    .bg-item{padding:5px 11px;font-size:12px;font-weight:500;cursor:pointer;color:var(--t2);background:none;border:none;transition:all .15s}
+    .bg-item:hover{color:var(--t1);background:rgba(255,255,255,.04)}
+    .bg-item.on{color:var(--t1);background:var(--bg4);box-shadow:inset 0 0 0 1px var(--accent)}
+
+    /* chart box */
+    .cbox{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative}
+    .clegend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;min-height:20px}
+    .cleg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)}
+    .cwrap{position:relative;height:340px}
+    .cwrap-sm{position:relative;height:110px;margin-top:10px}
+    .cdiv{height:1px;background:var(--border);margin:12px 0}
+    .cvol-lbl{font-size:11px;color:var(--t3);margin-bottom:5px}
+
+    /* loading */
+    .loader{display:none;position:absolute;inset:0;background:rgba(13,17,23,.6);align-items:center;justify-content:center;border-radius:10px;z-index:10;backdrop-filter:blur(2px)}
+    .loader.show{display:flex}
+    .spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* RSI */
+    .rsi-box{display:none}
+    .rsi-hdr{font-size:11px;color:var(--t2);margin-bottom:8px}
+
+    /* footer note */
+    .fnote{font-size:11px;color:var(--t3);text-align:center;padding:6px;border-top:1px solid var(--border)}
+
+    /* backdrop (mobile) */
+    .backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150}
+    .backdrop.show{display:block}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .stats{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:700px){
+      .hamburger{display:flex}
+      .sidebar{position:fixed;top:56px;left:0;height:calc(100vh - 56px);z-index:160;transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .app{display:block}
+      .main{height:calc(100vh - 56px);padding:12px}
+      .ticker-price{font-size:20px}
+      .cwrap{height:260px}
+    }
+    @media(max-width:480px){
+      .stats{grid-template-columns:1fr 1fr}
+      .card-val{font-size:15px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="hamburger" onclick="toggleSidebar()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+    <a class="logo" href="#">
+      <div class="logo-icon">📈</div>
+      EmlakTrend
+    </a>
+  </div>
+  <div class="hdr-right">
+    <span class="live-dot"></span>
+    <span>Demo Modu — Sanal Veri</span>
+  </div>
+</header>
+
+<div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- Konum -->
+    <div class="sb-sec">
+      <div class="sb-title">📍 Konum</div>
+      <div class="fg">
+        <label class="fl">İl</label>
+        <select class="fs" id="citySelect" onchange="onCityChange()">
+          <option value="istanbul">İstanbul</option>
+          <option value="ankara">Ankara</option>
+          <option value="izmir">İzmir</option>
+          <option value="bursa">Bursa</option>
+          <option value="antalya">Antalya</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">İlçe</label>
+        <select class="fs" id="districtSelect" onchange="scheduleUpdate()"></select>
+      </div>
+    </div>
+
+    <!-- Konut Tipi -->
+    <div class="sb-sec">
+      <div class="sb-title">🏠 Konut Tipi</div>
+      <div class="fg">
+        <label class="fl">Oda / Salon</label>
+        <select class="fs" id="roomSelect" onchange="scheduleUpdate()">
+          <option value="1+1">1+1 Daire</option>
+          <option value="2+1">2+1 Daire</option>
+          <option value="3+1" selected>3+1 Daire</option>
+          <option value="4+1">4+1 Daire</option>
+          <option value="villa">Villa</option>
+          <option value="mustakil">Müstakil Ev</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl">Fiyat Gösterimi</label>
+        <select class="fs" id="currencySelect" onchange="scheduleUpdate()">
+          <option value="tl">Toplam Fiyat (₺)</option>
+          <option value="m2">m² Birim Fiyatı (₺/m²)</option>
+          <option value="usd">Dolar Bazlı ($)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- İndikatörler -->
+    <div class="sb-sec">
+      <div class="sb-title">📊 İndikatörler</div>
+      <div class="ind-list">
+        <div class="ind-row" onclick="toggleInd('ma7')">
+          <div class="ind-name"><span class="dot" style="background:#f59e0b"></span>Hareketli Ortalama 7</div>
+          <div class="tog on" id="tog-ma7"></div>
+        </div>
+        <div class="ind-row" onclick="toggleInd('ma20')">
+          <div class="ind-name"><span class="dot" style="background:#818cf8"></span>Hareketli Ortalama 20</div>
+          <div class="tog on" id="tog-ma20"></div>
+        </div>
+        <div class="ind-row" onclick="toggleInd('ma50')">
+          <div class="ind-name"><span class="dot" style="background:#f43f5e"></span>Hareketli Ortalama 50</div>
+          <div class="tog" id="tog-ma50"></div>
+        </div>
+        <div class="ind-row" onclick="toggleInd('bb')">
+          <div class="ind-name"><span class="dot" style="background:#22d3ee"></span>Bollinger Bantları</div>
+          <div class="tog" id="tog-bb"></div>
+        </div>
+        <div class="ind-row" onclick="toggleInd('rsi')">
+          <div class="ind-name"><span class="dot" style="background:#a371f7"></span>RSI (14)</div>
+          <div class="tog" id="tog-rsi"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alarmlar -->
+    <div class="sb-sec">
+      <div class="sb-title">🔔 Fiyat Alarmları</div>
+      <div class="al-row">
+        <select class="fs" id="alType" style="background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%236e7681' d='M5 7L0 2h10z'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 8px center">
+          <option value="above">↑ Üzerine çıkarsa</option>
+          <option value="below">↓ Altına düşerse</option>
+        </select>
+      </div>
+      <div class="al-row">
+        <input type="number" class="fs" id="alPrice" placeholder="Eşik fiyat (₺)" style="background-image:none">
+        <button class="btn btn-p btn-sm" onclick="addAlert()">+ Ekle</button>
+      </div>
+      <div class="al-items" id="alList"></div>
+    </div>
+
+    <div style="padding:12px 16px;font-size:11px;color:var(--t3);line-height:1.6">
+      Tüm veriler demo amaçlı üretilmiş simüle verilerdir. Gerçek piyasa verisi değildir.
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- Ticker Bar -->
+    <div class="ticker">
+      <div>
+        <div class="ticker-title" id="tkTitle">İstanbul / Ataşehir — 3+1</div>
+        <div class="ticker-sub">Daire · Ortalama Fiyat Endeksi</div>
+      </div>
+      <div class="ticker-price" id="tkPrice">—</div>
+      <div class="chg up" id="tkChg">—</div>
+      <div class="ticker-meta" id="tkMeta">—</div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats">
+      <div class="card">
+        <div class="card-lbl">Güncel Ortalama</div>
+        <div class="card-val" id="stAvg">—</div>
+        <div class="card-sub" id="stAvgSub">son ay</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">m² Birim Fiyatı</div>
+        <div class="card-val" id="stM2">—</div>
+        <div class="card-sub">₺/m²</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">Dönem Değişimi</div>
+        <div class="card-val" id="stChg">—</div>
+        <div class="card-sub" id="stChgSub">seçilen aralık</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">Ort. Aktif İlan</div>
+        <div class="card-val" id="stList">—</div>
+        <div class="card-sub">aylık ortalama</div>
+      </div>
+    </div>
+
+    <!-- Chart Controls -->
+    <div class="ctrl">
+      <span class="ctrl-lbl">Periyot:</span>
+      <div class="btn-grp" id="pgPeriod">
+        <button class="bg-item" data-val="daily" onclick="setPeriod(this)">Günlük</button>
+        <button class="bg-item" data-val="weekly" onclick="setPeriod(this)">Haftalık</button>
+        <button class="bg-item on" data-val="monthly" onclick="setPeriod(this)">Aylık</button>
+      </div>
+      <span class="ctrl-lbl" style="margin-left:4px">Aralık:</span>
+      <div class="btn-grp" id="pgRange">
+        <button class="bg-item" data-val="1m" onclick="setRange(this)">1A</button>
+        <button class="bg-item" data-val="3m" onclick="setRange(this)">3A</button>
+        <button class="bg-item" data-val="6m" onclick="setRange(this)">6A</button>
+        <button class="bg-item" data-val="1y" onclick="setRange(this)">1Y</button>
+        <button class="bg-item" data-val="3y" onclick="setRange(this)">3Y</button>
+        <button class="bg-item on" data-val="5y" onclick="setRange(this)">5Y</button>
+      </div>
+    </div>
+
+    <!-- Main Chart -->
+    <div class="cbox">
+      <div class="loader" id="loader"><div class="spinner"></div></div>
+      <div class="clegend" id="legend">
+        <div class="cleg-item"><span class="dot" style="background:#3b82f6"></span>Ort. Fiyat</div>
+        <div class="cleg-item" id="leg-ma7"><span class="dot" style="background:#f59e0b"></span>MA 7</div>
+        <div class="cleg-item" id="leg-ma20"><span class="dot" style="background:#818cf8"></span>MA 20</div>
+        <div class="cleg-item" id="leg-ma50" style="display:none"><span class="dot" style="background:#f43f5e"></span>MA 50</div>
+        <div class="cleg-item" id="leg-bb" style="display:none"><span class="dot" style="background:#22d3ee"></span>Bollinger Bantları</div>
+      </div>
+      <div class="cwrap"><canvas id="mainChart"></canvas></div>
+      <div class="cdiv"></div>
+      <div class="cvol-lbl">📦 İlan Hacmi</div>
+      <div class="cwrap-sm"><canvas id="volChart"></canvas></div>
+    </div>
+
+    <!-- RSI -->
+    <div class="cbox rsi-box" id="rsiBox">
+      <div class="rsi-hdr">
+        RSI (14) &nbsp;·&nbsp; Güncel: <strong id="rsiVal" style="color:var(--purple)">—</strong>
+        <span style="color:var(--t3);margin-left:12px">30 → Aşırı Satım &nbsp;|&nbsp; 70 → Aşırı Alım</span>
+      </div>
+      <div class="cwrap-sm"><canvas id="rsiChart"></canvas></div>
+    </div>
+
+    <div class="fnote">⚠️ Bu platform demo amaçlıdır. Gösterilen tüm fiyat verileri yapay zeka tarafından simüle edilmiştir — gerçek piyasa verisi yansıtmamaktadır.</div>
+  </main>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+// VERİ YAPILANDIRMASI
+// ════════════════════════════════════════════════
+const CITIES = {
+  istanbul:{name:'İstanbul',districts:{
+    atasehir:{n:'Ataşehir',b:13500},kadikoy:{n:'Kadıköy',b:19000},
+    besiktas:{n:'Beşiktaş',b:24000},sisli:{n:'Şişli',b:17000},
+    uskudar:{n:'Üsküdar',b:12000},maltepe:{n:'Maltepe',b:9500},
+    pendik:{n:'Pendik',b:7800},umraniye:{n:'Ümraniye',b:9000},
+    kartal:{n:'Kartal',b:8200},bagcilar:{n:'Bağcılar',b:6200},
+    esenyurt:{n:'Esenyurt',b:5200},beylikduzu:{n:'Beylikdüzü',b:7200},
+    bahcelievler:{n:'Bahçelievler',b:8000},sariyer:{n:'Sarıyer',b:21000},
+    zeytinburnu:{n:'Zeytinburnu',b:10000}
+  }},
+  ankara:{name:'Ankara',districts:{
+    cankaya:{n:'Çankaya',b:9000},kecioren:{n:'Keçiören',b:5200},
+    mamak:{n:'Mamak',b:4200},etimesgut:{n:'Etimesgut',b:5800},
+    yenimahalle:{n:'Yenimahalle',b:6200},sincan:{n:'Sincan',b:3800},
+    altindag:{n:'Altındağ',b:3600},pursaklar:{n:'Pursaklar',b:4500},
+    golbasi:{n:'Gölbaşı',b:7000}
+  }},
+  izmir:{name:'İzmir',districts:{
+    konak:{n:'Konak',b:11500},karsiyaka:{n:'Karşıyaka',b:10500},
+    bornova:{n:'Bornova',b:8500},buca:{n:'Buca',b:7500},
+    bayrakli:{n:'Bayraklı',b:9500},cigli:{n:'Çiğli',b:7800},
+    gaziemir:{n:'Gaziemir',b:6800},balcova:{n:'Balçova',b:9800},
+    narlidere:{n:'Narlıdere',b:10200}
+  }},
+  bursa:{name:'Bursa',districts:{
+    nilufer:{n:'Nilüfer',b:7000},osmangazi:{n:'Osmangazi',b:5400},
+    yildirim:{n:'Yıldırım',b:4400},gorukle:{n:'Görükle',b:6500},
+    mudanya:{n:'Mudanya',b:8500}
+  }},
+  antalya:{name:'Antalya',districts:{
+    muratpasa:{n:'Muratpaşa',b:11000},kepez:{n:'Kepez',b:6800},
+    konyaalti:{n:'Konyaaltı',b:12500},dosemealti:{n:'Döşemealtı',b:7800},
+    alanya:{n:'Alanya',b:13000},manavgat:{n:'Manavgat',b:9000}
+  }}
+};
+
+const ROOM_TYPES = {
+  '1+1':{m:0.68,sz:60},'2+1':{m:1.0,sz:90},'3+1':{m:1.38,sz:130},
+  '4+1':{m:1.82,sz:170},'villa':{m:3.6,sz:310},'mustakil':{m:2.3,sz:185}
+};
+
+// Aylık büyüme oranları % (Ocak 2021 - Mart 2026 = 63 ay)
+const GROWTH = [
+  // 2021
+  2.9,2.6,2.3,2.5,2.7,2.9,2.4,2.2,2.6,2.8,3.1,3.4,
+  // 2022 (zirve enflasyon)
+  4.3,4.6,5.1,4.9,5.3,5.6,4.9,4.3,3.9,3.6,3.3,3.9,
+  // 2023
+  3.6,3.3,3.1,2.9,2.6,2.3,2.1,2.4,2.6,2.9,2.7,2.5,
+  // 2024
+  2.3,2.1,1.9,1.8,1.6,1.9,1.7,1.5,1.6,1.8,1.9,2.0,
+  // 2025
+  1.6,1.4,1.3,1.2,1.1,1.3,1.2,1.1,1.0,1.2,1.3,1.4,
+  // 2026
+  1.1,1.0,0.9
+];
+
+// Yaklaşık USD/TRY kuru
+const USDTRY = [
+  8.1,8.2,8.2,8.4,8.5,8.8,8.8,8.6,8.9,9.3,10.6,13.5,
+  13.6,14.1,14.7,14.8,15.6,16.6,17.3,18.1,18.5,18.7,18.8,18.9,
+  19.0,19.1,19.3,19.6,19.9,23.6,26.2,27.0,27.2,28.2,29.0,29.7,
+  30.6,31.2,32.6,33.2,32.7,33.2,33.7,34.0,34.2,34.4,34.3,34.1,
+  34.6,35.1,35.6,36.1,37.2,38.2,38.7,39.2,39.7,40.2,40.7,41.2,
+  41.7,42.2,42.7
+];
+
+// ════════════════════════════════════════════════
+// DURUM
+// ════════════════════════════════════════════════
+const S = {
+  city:'istanbul',district:'atasehir',room:'3+1',currency:'tl',
+  period:'monthly',range:'5y',
+  inds:{ma7:true,ma20:true,ma50:false,bb:false,rsi:false}
+};
+let mainChart=null,volChart=null,rsiChart=null;
+let cache={};
+let alerts=[];
+let updateTimer=null;
+
+// ════════════════════════════════════════════════
+// VERİ ÜRETİMİ
+// ════════════════════════════════════════════════
+function seededRnd(seed){
+  let s=seed%2147483647; if(s<=0) s+=2147483646;
+  return ()=>{ s=s*16807%2147483647; return (s-1)/2147483646; };
+}
+
+function generateRaw(city,district,room){
+  const key=`${city}|${district}|${room}`;
+  if(cache[key]) return cache[key];
+  const base=CITIES[city].districts[district].b * ROOM_TYPES[room].m;
+  const sz=ROOM_TYPES[room].sz;
+  const rnd=seededRnd(key.split('').reduce((a,c)=>a+c.charCodeAt(0),0));
+  let m2=base;
+  const pts=[];
+  for(let i=0;i<63;i++){
+    const g=GROWTH[i]/100;
+    const noise=(rnd()-.5)*.022;
+    const seasonal=Math.sin(i%12*Math.PI/6)*.006;
+    m2*=(1+g+noise+seasonal);
+    pts.push({
+      m2:Math.round(m2),
+      total:Math.round(m2*sz/1000)*1000,
+      vol:Math.round(80+rnd()*120+i*1.5),
+      usd:Math.round(m2*sz/USDTRY[i])
+    });
+  }
+  cache[key]=pts;
+  return pts;
+}
+
+function getMonthLabels(){
+  const r=[];
+  for(let i=0;i<63;i++){
+    const d=new Date(2021,i,1);
+    r.push(d.toLocaleDateString('tr-TR',{year:'numeric',month:'short'}));
+  }
+  return r;
+}
+
+function getRangeIndices(range){
+  const end=62;
+  const starts={'1m':61,'3m':59,'6m':56,'1y':50,'3y':26,'5y':0};
+  const s=starts[range]??0;
+  return Array.from({length:end-s+1},(_,i)=>s+i);
+}
+
+function buildPeriodData(raw,indices,period){
+  if(period==='monthly') return {pts:indices.map(i=>raw[i]),lbls:getMonthLabels().filter((_,i)=>indices.includes(i))};
+  const monthLbls=getMonthLabels();
+  if(period==='weekly'){
+    const pts=[],lbls=[];
+    for(let ii=0;ii<indices.length;ii++){
+      const d=raw[indices[ii]];
+      const wk=ii<indices.length-1?4:1;
+      for(let w=0;w<wk;w++){
+        const frac=w/4;
+        const nxt=ii<indices.length-1?raw[indices[ii+1]]:d;
+        const rndW=(Math.sin((ii*31+w*7)*0.9)*.5+.5-.5)*.015;
+        pts.push({
+          m2:Math.round(d.m2*(1-frac)+nxt.m2*frac+d.m2*rndW),
+          total:Math.round((d.total*(1-frac)+nxt.total*frac)*((1+rndW))/1000)*1000,
+          vol:Math.round(d.vol*(1-frac)+nxt.vol*frac),
+          usd:Math.round(d.usd*(1-frac)+nxt.usd*frac)
+        });
+        lbls.push(monthLbls[indices[ii]]+' H'+(w+1));
+      }
+    }
+    return {pts,lbls};
+  }
+  // daily
+  const pts=[],lbls=[];
+  indices.forEach(mi=>{
+    const d=raw[mi]; const ml=monthLbls[mi];
+    for(let day=1;day<=28;day++){
+      const rndD=(Math.sin((mi*97+day*13)*0.7)*.5-.25)*.01;
+      pts.push({m2:Math.round(d.m2*(1+rndD)),total:Math.round(d.total*(1+rndD)/1000)*1000,vol:Math.round(d.vol+(rndD*100)),usd:Math.round(d.usd*(1+rndD))});
+      lbls.push(`${ml} ${day}`);
+    }
+  });
+  return {pts,lbls};
+}
+
+function getPriceArr(pts,currency){
+  if(currency==='m2') return pts.map(p=>p.m2);
+  if(currency==='usd') return pts.map(p=>p.usd);
+  return pts.map(p=>p.total);
+}
+
+// ════════════════════════════════════════════════
+// İNDİKATÖR HESAPLARI
+// ════════════════════════════════════════════════
+function sma(arr,n){return arr.map((_,i)=>i<n-1?null:arr.slice(i-n+1,i+1).reduce((a,b)=>a+b)/n);}
+function bollinger(arr,n=20){
+  return arr.map((_,i)=>{
+    if(i<n-1) return{u:null,l:null};
+    const sl=arr.slice(i-n+1,i+1);
+    const m=sl.reduce((a,b)=>a+b)/n;
+    const std=Math.sqrt(sl.reduce((a,b)=>a+(b-m)**2,0)/n);
+    return{u:Math.round(m+2*std),l:Math.round(m-2*std)};
+  });
+}
+function rsi(arr,n=14){
+  const chg=arr.slice(1).map((v,i)=>v-arr[i]);
+  return [null,...chg.map((_,i)=>{
+    if(i<n) return null;
+    const sl=chg.slice(i-n+1,i+1);
+    const g=sl.filter(v=>v>0).reduce((a,b)=>a+b,0)/n;
+    const l=Math.abs(sl.filter(v=>v<0).reduce((a,b)=>a+b,0))/n;
+    if(l===0) return 100;
+    return Math.round(100-100/(1+g/l));
+  })];
+}
+
+// ════════════════════════════════════════════════
+// FORMAT
+// ════════════════════════════════════════════════
+function fmt(v,cur){
+  const n=Math.round(v);
+  if(cur==='usd') return '$'+n.toLocaleString('tr-TR');
+  if(cur==='m2') return '₺'+n.toLocaleString('tr-TR')+'/m²';
+  if(n>=1000000) return '₺'+(n/1000000).toFixed(2)+'M';
+  return '₺'+n.toLocaleString('tr-TR');
+}
+
+// ════════════════════════════════════════════════
+// GRAFIK RENDER
+// ════════════════════════════════════════════════
+function renderChart(){
+  const raw=generateRaw(S.city,S.district,S.room);
+  const indices=getRangeIndices(S.range);
+  const {pts,lbls}=buildPeriodData(raw,indices,S.period);
+  const prices=getPriceArr(pts,S.currency);
+  const vols=pts.map(p=>p.vol);
+
+  updateStats(prices,pts,vols);
+  updateTicker(prices,pts);
+  checkAlerts(prices[prices.length-1]);
+
+  const ma7a=sma(prices,Math.min(7,prices.length));
+  const ma20a=sma(prices,Math.min(20,prices.length));
+  const ma50a=sma(prices,Math.min(50,prices.length));
+  const bba=bollinger(prices,Math.min(20,prices.length));
+  const rsiA=rsi(prices,14);
+
+  const showLbl=(id,show)=>{document.getElementById(id).style.display=show?'flex':'none';};
+  showLbl('leg-ma7',S.inds.ma7);showLbl('leg-ma20',S.inds.ma20);
+  showLbl('leg-ma50',S.inds.ma50);showLbl('leg-bb',S.inds.bb);
+
+  const ds=[{
+    label:'Ort. Fiyat',data:prices,
+    borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.06)',
+    borderWidth:2,fill:false,tension:.35,
+    pointRadius:prices.length>60?0:prices.length>20?0:3,
+    pointHoverRadius:5,order:1
+  }];
+
+  if(S.inds.ma7) ds.push({label:'MA 7',data:ma7a,borderColor:'#f59e0b',borderWidth:1.5,pointRadius:0,fill:false,tension:.35,order:2});
+  if(S.inds.ma20) ds.push({label:'MA 20',data:ma20a,borderColor:'#818cf8',borderWidth:1.5,pointRadius:0,fill:false,tension:.35,order:2});
+  if(S.inds.ma50) ds.push({label:'MA 50',data:ma50a,borderColor:'#f43f5e',borderWidth:1.5,pointRadius:0,fill:false,tension:.35,order:2});
+  if(S.inds.bb){
+    ds.push({label:'BB Üst',data:bba.map(b=>b.u),borderColor:'rgba(34,211,238,.55)',borderWidth:1,borderDash:[5,4],pointRadius:0,fill:false,tension:.35,order:3});
+    ds.push({label:'BB Alt',data:bba.map(b=>b.l),borderColor:'rgba(34,211,238,.55)',borderWidth:1,borderDash:[5,4],pointRadius:0,fill:'-1',backgroundColor:'rgba(34,211,238,.04)',tension:.35,order:3});
+  }
+
+  const chartOpts=(yMin)=>({
+    responsive:true,maintainAspectRatio:false,
+    animation:{duration:600,easing:'easeInOutQuart'},
+    interaction:{mode:'index',intersect:false},
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#1c2128',borderColor:'#30363d',borderWidth:1,
+        titleColor:'#e6edf3',bodyColor:'#8b949e',padding:10,cornerRadius:8,
+        callbacks:{label:c=>c.raw==null?null:` ${c.dataset.label}: ${fmt(c.raw,S.currency)}`}
+      }
+    },
+    scales:{
+      x:{grid:{color:'rgba(48,54,61,.45)'},ticks:{color:'#6e7681',maxTicksLimit:8,font:{size:11}}},
+      y:{grid:{color:'rgba(48,54,61,.45)'},position:'right',ticks:{color:'#6e7681',font:{size:11},callback:v=>{
+        if(S.currency==='usd') return '$'+(v/1000).toFixed(0)+'K';
+        if(v>=1000000) return (v/1000000).toFixed(1)+'M';
+        if(v>=1000) return (v/1000).toFixed(0)+'K';
+        return v;
+      }}}
+    }
+  });
+
+  const ctx=document.getElementById('mainChart').getContext('2d');
+  if(mainChart) mainChart.destroy();
+  mainChart=new Chart(ctx,{type:'line',data:{labels:lbls,datasets:ds},options:chartOpts()});
+
+  // Hacim
+  const vcol=prices.map((v,i)=>i===0?'rgba(59,130,246,.5)':v>=prices[i-1]?'rgba(63,185,80,.55)':'rgba(248,81,73,.55)');
+  const vctx=document.getElementById('volChart').getContext('2d');
+  if(volChart) volChart.destroy();
+  volChart=new Chart(vctx,{type:'bar',data:{labels:lbls,datasets:[{data:vols,backgroundColor:vcol,borderWidth:0,borderRadius:2}]},options:{
+    responsive:true,maintainAspectRatio:false,animation:{duration:600},
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#1c2128',borderColor:'#30363d',borderWidth:1,callbacks:{label:c=>` İlan: ${c.raw.toLocaleString('tr-TR')}`}}},
+    scales:{x:{grid:{display:false},ticks:{display:false}},y:{grid:{color:'rgba(48,54,61,.3)'},position:'right',ticks:{color:'#6e7681',font:{size:10},maxTicksLimit:3}}}
+  }});
+
+  // RSI
+  const rsiBox=document.getElementById('rsiBox');
+  if(S.inds.rsi){
+    rsiBox.style.display='block';
+    const last=rsiA.filter(v=>v!==null).at(-1);
+    const rsiEl=document.getElementById('rsiVal');
+    rsiEl.textContent=last??'—';
+    rsiEl.style.color=last>70?'var(--red)':last<30?'var(--green)':'var(--purple)';
+    const rctx=document.getElementById('rsiChart').getContext('2d');
+    if(rsiChart) rsiChart.destroy();
+    rsiChart=new Chart(rctx,{type:'line',data:{labels:lbls,datasets:[
+      {label:'RSI',data:rsiA,borderColor:'#a371f7',borderWidth:1.5,pointRadius:0,fill:false,tension:.3},
+      {data:Array(lbls.length).fill(70),borderColor:'rgba(248,81,73,.4)',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false},
+      {data:Array(lbls.length).fill(30),borderColor:'rgba(63,185,80,.4)',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false}
+    ]},options:{
+      responsive:true,maintainAspectRatio:false,animation:{duration:600},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1c2128',borderColor:'#30363d',borderWidth:1,callbacks:{label:c=>c.datasetIndex===0?` RSI: ${c.raw}`:null}}},
+      scales:{
+        x:{grid:{display:false},ticks:{display:false}},
+        y:{min:0,max:100,grid:{color:'rgba(48,54,61,.3)'},position:'right',ticks:{color:'#6e7681',font:{size:10}}}
+      }
+    }});
+  } else {
+    rsiBox.style.display='none';
+  }
+
+  document.getElementById('loader').classList.remove('show');
+}
+
+function updateStats(prices,pts,vols){
+  const last=prices.at(-1), first=prices[0];
+  const chgPct=((last-first)/first*100).toFixed(1);
+  const pos=parseFloat(chgPct)>=0;
+  const avgVol=Math.round(vols.reduce((a,b)=>a+b)/vols.length);
+
+  document.getElementById('stAvg').textContent=fmt(last,S.currency);
+  document.getElementById('stM2').textContent='₺'+pts.at(-1).m2.toLocaleString('tr-TR');
+  document.getElementById('stChg').textContent=(pos?'+':'')+chgPct+'%';
+  document.getElementById('stChg').className='card-val '+(pos?'up':'dn');
+  document.getElementById('stList').textContent=avgVol.toLocaleString('tr-TR');
+}
+
+function updateTicker(prices,pts){
+  const d=CITIES[S.city].districts[S.district];
+  const last=prices.at(-1),prev=prices.at(-2)??prices.at(-1);
+  const chg=((last-prev)/prev*100).toFixed(2);
+  const pos=parseFloat(chg)>=0;
+  document.getElementById('tkTitle').textContent=`${CITIES[S.city].name} / ${d.n} — ${S.room}`;
+  document.getElementById('tkPrice').textContent=fmt(last,S.currency);
+  document.getElementById('tkChg').textContent=(pos?'▲ +':'▼ ')+chg+'%';
+  document.getElementById('tkChg').className='chg '+(pos?'up':'dn');
+  document.getElementById('tkMeta').textContent='Son güncelleme: '+new Date().toLocaleDateString('tr-TR',{day:'2-digit',month:'long',year:'numeric'});
+}
+
+// ════════════════════════════════════════════════
+// ALARM SİSTEMİ
+// ════════════════════════════════════════════════
+function addAlert(){
+  const price=parseFloat(document.getElementById('alPrice').value);
+  const type=document.getElementById('alType').value;
+  if(!price||isNaN(price)) return;
+  alerts.push({price,type,id:Date.now(),triggered:false});
+  renderAlerts();
+  document.getElementById('alPrice').value='';
+}
+
+function removeAlert(id){
+  alerts=alerts.filter(a=>a.id!==id);
+  renderAlerts();
+}
+
+function checkAlerts(currentPrice){
+  let changed=false;
+  alerts.forEach(a=>{
+    const triggered=(a.type==='above'&&currentPrice>=a.price)||(a.type==='below'&&currentPrice<=a.price);
+    if(triggered&&!a.triggered){a.triggered=true;changed=true;}
+    else if(!triggered&&a.triggered){a.triggered=false;changed=true;}
+  });
+  if(changed) renderAlerts();
+}
+
+function renderAlerts(){
+  const el=document.getElementById('alList');
+  el.innerHTML='';
+  if(!alerts.length){
+    el.innerHTML='<div style="font-size:11px;color:var(--t3);text-align:center;padding:8px 0">Henüz alarm eklenmedi</div>';
+    return;
+  }
+  alerts.forEach(a=>{
+    const div=document.createElement('div');
+    div.className='al-item'+(a.triggered?' al-triggered':'');
+    div.innerHTML=`
+      <span style="font-size:13px;font-weight:700">${a.price.toLocaleString('tr-TR')} ₺</span>
+      <span class="al-badge ${a.type==='above'?'al-up':'al-dn'}">${a.type==='above'?'↑ Üzeri':'↓ Altı'}</span>
+      ${a.triggered?'<span style="font-size:10px;color:var(--yellow)">🔔 TETİKLENDİ</span>':''}
+      <button class="al-del" onclick="removeAlert(${a.id})">×</button>
+    `;
+    el.appendChild(div);
+  });
+}
+
+// ════════════════════════════════════════════════
+// UI KONTROLLER
+// ════════════════════════════════════════════════
+function onCityChange(){
+  const city=document.getElementById('citySelect').value;
+  S.city=city;
+  const ds=CITIES[city].districts;
+  const sel=document.getElementById('districtSelect');
+  sel.innerHTML='';
+  Object.entries(ds).forEach(([k,v])=>{
+    const o=document.createElement('option');
+    o.value=k;o.textContent=v.n;sel.appendChild(o);
+  });
+  S.district=Object.keys(ds)[0];
+  scheduleUpdate();
+}
+
+function scheduleUpdate(){
+  S.city=document.getElementById('citySelect').value;
+  S.district=document.getElementById('districtSelect').value;
+  S.room=document.getElementById('roomSelect').value;
+  S.currency=document.getElementById('currencySelect').value;
+  document.getElementById('loader').classList.add('show');
+  clearTimeout(updateTimer);
+  updateTimer=setTimeout(renderChart,350);
+}
+
+function setPeriod(btn){
+  S.period=btn.dataset.val;
+  document.querySelectorAll('#pgPeriod .bg-item').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  // Günlük modda uzun aralıkları kısıtla
+  if(S.period==='daily'&&['3y','5y'].includes(S.range)){
+    S.range='3m';
+    document.querySelectorAll('#pgRange .bg-item').forEach(b=>{b.classList.remove('on');if(b.dataset.val==='3m') b.classList.add('on');});
+  }
+  scheduleUpdate();
+}
+
+function setRange(btn){
+  S.range=btn.dataset.val;
+  document.querySelectorAll('#pgRange .bg-item').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  scheduleUpdate();
+}
+
+function toggleInd(name){
+  S.inds[name]=!S.inds[name];
+  document.getElementById('tog-'+name).classList.toggle('on',S.inds[name]);
+  scheduleUpdate();
+}
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('backdrop').classList.toggle('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('show');
+}
+
+// ════════════════════════════════════════════════
+// BAŞLATMA
+// ════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  // İstanbul ilçelerini doldur
+  const ds=CITIES['istanbul'].districts;
+  const sel=document.getElementById('districtSelect');
+  Object.entries(ds).forEach(([k,v])=>{
+    const o=document.createElement('option');
+    o.value=k;o.textContent=v.n;sel.appendChild(o);
+  });
+  sel.value='atasehir';
+  S.district='atasehir';
+  renderAlerts();
+  renderChart();
+});
+</script>
+</body>
+</html>
