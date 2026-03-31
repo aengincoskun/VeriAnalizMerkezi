@@ -100,7 +100,7 @@
     .ticker-meta{font-size:11px;color:var(--t3);margin-left:auto}
 
     /* stat cards */
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
     .card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;transition:border-color .2s}
     .card:hover{border-color:var(--accent)}
     .card-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:6px}
@@ -138,11 +138,58 @@
     /* footer note */
     .fnote{font-size:11px;color:var(--t3);text-align:center;padding:6px;border-top:1px solid var(--border)}
 
+    /* ── BÖLGE BİLGİLERİ ── */
+    .region-info{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px}
+    .region-info-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+    .region-badges{display:flex;gap:10px;flex-wrap:wrap}
+    .rb{display:flex;align-items:flex-start;gap:9px;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:10px 13px;flex:1;min-width:180px;transition:border-color .2s}
+    .rb:hover{border-color:var(--accent)}
+    .rb-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+    .rb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);margin-bottom:3px}
+    .rb-val{font-size:12px;color:var(--t1);line-height:1.5}
+    /* ── KİRA GETİRİ KARTI ── */
+    .card-rent{border-color:rgba(163,113,247,.3)}
+    .card-rent:hover{border-color:var(--purple)!important}
+    .card-rent .card-val{color:var(--purple)}
+    /* ── BÜTÇE MODALİ ── */
+    .budget-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+    .budget-overlay.show{display:flex}
+    .budget-modal{background:var(--bg2);border:1px solid var(--border);border-radius:14px;width:580px;max-width:calc(100vw - 32px);max-height:82vh;overflow-y:auto;padding:24px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+    .budget-modal::-webkit-scrollbar{width:4px}
+    .budget-modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+    .bm-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--t2);cursor:pointer;font-size:22px;line-height:1;padding:2px 6px;border-radius:5px}
+    .bm-close:hover{color:var(--t1);background:var(--bg4)}
+    .bm-title{font-size:18px;font-weight:700;margin-bottom:4px;padding-right:32px}
+    .bm-sub{font-size:12px;color:var(--t2);margin-bottom:18px;line-height:1.55}
+    .bm-input-row{display:flex;gap:10px;margin-bottom:18px}
+    .bm-input{flex:1;padding:10px 14px;background:var(--bg4);border:1px solid var(--border);border-radius:8px;color:var(--t1);font-size:14px;font-weight:600}
+    .bm-input:focus{outline:none;border-color:var(--accent)}
+    .bm-input::placeholder{color:var(--t3);font-weight:400;font-size:13px}
+    .bm-results{display:flex;flex-direction:column;gap:8px}
+    .bm-row{background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+    .bm-row:hover{border-color:var(--accent)}
+    .bm-rank{width:24px;height:24px;background:var(--bg3);border:1px solid var(--border);color:var(--t2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+    .bm-rank.gold{background:#e3b341;color:#0d1117;border-color:#e3b341}
+    .bm-rank.silver{background:#8b949e;color:#0d1117;border-color:#8b949e}
+    .bm-rank.bronze{background:#f97316;color:#0d1117;border-color:#f97316}
+    .bm-dist{flex:1}
+    .bm-dist-name{font-size:13px;font-weight:700}
+    .bm-dist-city{font-size:11px;color:var(--t2);margin-top:1px}
+    .bm-price{text-align:right}
+    .bm-price-val{font-size:14px;font-weight:800;color:var(--green)}
+    .bm-price-lbl{font-size:10px;color:var(--t3);margin-top:2px}
+    .bm-empty{text-align:center;padding:28px 16px;color:var(--t2);font-size:13px;line-height:1.6}
+    .btn-budget{background:rgba(31,111,235,.15);color:var(--accent2);border:1px solid rgba(31,111,235,.3);padding:6px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+    .btn-budget:hover{background:rgba(31,111,235,.28);border-color:var(--accent)}
+
     /* backdrop (mobile) */
     .backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150}
     .backdrop.show{display:block}
 
     /* ── RESPONSIVE ── */
+    @media(max-width:1200px){
+      .stats{grid-template-columns:repeat(3,1fr)}
+    }
     @media(max-width:900px){
       .stats{grid-template-columns:repeat(2,1fr)}
     }
@@ -368,6 +415,7 @@
       <div class="ticker-price" id="tkPrice">—</div>
       <div class="chg up" id="tkChg">—</div>
       <div class="ticker-meta" id="tkMeta">—</div>
+      <button class="btn-budget" onclick="openBudgetModal()">🔍 Bütçeme göre nerede alırım?</button>
     </div>
 
     <!-- Stats Cards -->
@@ -391,6 +439,39 @@
         <div class="card-lbl">Ort. Aktif İlan</div>
         <div class="card-val" id="stList">—</div>
         <div class="card-sub">aylık ortalama</div>
+      </div>
+      <div class="card card-rent">
+        <div class="card-lbl">Kira Getiri Oranı</div>
+        <div class="card-val" id="stRent">—</div>
+        <div class="card-sub" id="stRentSub">brüt yıllık tahmini</div>
+      </div>
+    </div>
+
+    <!-- Bölge Bilgileri -->
+    <div class="region-info">
+      <div class="region-info-hdr">📍 Bölge Bilgileri <span style="font-size:9px;color:var(--t3);font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px">— demo verisi</span></div>
+      <div class="region-badges">
+        <div class="rb">
+          <div class="rb-icon">🚇</div>
+          <div>
+            <div class="rb-lbl">Metro / Ulaşım</div>
+            <div class="rb-val" id="rbMetro">—</div>
+          </div>
+        </div>
+        <div class="rb">
+          <div class="rb-icon">🏗️</div>
+          <div>
+            <div class="rb-lbl">Kentsel Dönüşüm</div>
+            <div class="rb-val" id="rbDonusum">—</div>
+          </div>
+        </div>
+        <div class="rb">
+          <div class="rb-icon">📈</div>
+          <div>
+            <div class="rb-lbl">Fiyat İvmesi (son 3 ay)</div>
+            <div class="rb-val" id="rbIvme">—</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -455,6 +536,23 @@
   </div><!-- /radarPanel -->
 
   </main>
+</div>
+
+<!-- ── BÜTÇE MODAL ── -->
+<div class="budget-overlay" id="budgetOverlay" onclick="budgetOverlayClick(event)">
+  <div class="budget-modal" id="budgetModalBox">
+    <button class="bm-close" onclick="closeBudgetModal()">×</button>
+    <div class="bm-title">🔍 Bütçeme göre nerede alırım?</div>
+    <div class="bm-sub">Seçili şehirde, seçili oda tipinde belirlediğiniz bütçeyle alabileceğiniz en uygun 5 ilçeyi görün. Fiyatlar anlık simüle veriye göredir.</div>
+    <div class="bm-input-row">
+      <input class="bm-input" type="number" id="budgetInput" placeholder="Maksimum bütçeniz (₺)" onkeydown="if(event.key==='Enter')searchBudget()">
+      <button class="btn btn-p" onclick="searchBudget()">Ara</button>
+    </div>
+    <div class="bm-results" id="budgetResults">
+      <div class="bm-empty">Yukarıya bütçenizi girin ve <strong>Ara</strong> butonuna tıklayın</div>
+    </div>
+    <div style="margin-top:14px;font-size:10px;color:var(--t3);text-align:center">⚠️ Demo verisi — Gerçek piyasa fiyatlarını yansıtmamaktadır</div>
+  </div>
 </div>
 
 <!-- ── RADAR SLIDE-IN MODAL ── -->
@@ -699,6 +797,8 @@ function renderChart(){
   updateStats(prices,pts,vols);
   updateTicker(prices,pts);
   checkAlerts(prices[prices.length-1]);
+  updateBolgeInfo();
+  updateKiraGetiri(pts.at(-1).total);
 
   const ma7a=sma(prices,Math.min(7,prices.length));
   const ma20a=sma(prices,Math.min(20,prices.length));
@@ -1307,6 +1407,175 @@ function openRadarModal(cityKey, dKey){
 function closeRadarModal(){
   document.getElementById('rmPanel').classList.remove('open');
   document.getElementById('rmOverlay').classList.remove('show');
+}
+
+// ════════════════════════════════════════════════
+// YENİ ÖZELLİKLER — BÖLGE BİLGİLERİ
+// ════════════════════════════════════════════════
+const BOLGE_INFO = {
+  istanbul:{
+    atasehir:{metro:'M4 hattı aktif — Kadıköy bağlantısı mevcut',donusum:'Aktif dönüşüm bölgesi — %28 yapı yenilendi'},
+    kadikoy:{metro:'M4, Marmaray ve vapur bağlantısı — çok güçlü',donusum:'Kısmi dönüşüm — tarihi yapılar korunuyor'},
+    besiktas:{metro:'M2 hattı ve feribot bağlantısı aktif',donusum:'Seçili bölgelerde dönüşüm — %15 yenilenme'},
+    sisli:{metro:'M2 ve M7 hattı mevcut — Mecidiyeköy merkez',donusum:'Kentsel yenileme projeleri devam ediyor'},
+    uskudar:{metro:'Marmaray ve vapur bağlantısı aktif',donusum:'Kısmi dönüşüm — %20 yapı yenilendi'},
+    maltepe:{metro:'Marmaray hattında durak mevcut',donusum:'Orta düzey dönüşüm — %18 yenilenme'},
+    pendik:{metro:'Marmaray son durağı — YHT bağlantısı var',donusum:'Aktif dönüşüm bölgesi — %32 yapı yenilendi'},
+    umraniye:{metro:'M7 hattı mevcut — genişleme planı var',donusum:'Yoğun dönüşüm — %38 yapı yenilendi'},
+    kartal:{metro:'Marmaray durak var — M12 planlandı (2027)',donusum:'Aktif dönüşüm — sahil hattında yeni projeler'},
+    bagcilar:{metro:'M1/T1 hattı aktif — yoğun kullanım',donusum:'Yoğun dönüşüm — %45 yapı yenilendi'},
+    esenyurt:{metro:'M3 hattı mevcut — Başakşehir bağlantısı',donusum:'Aktif büyüme bölgesi — yeni yapılaşma hâkim'},
+    beylikduzu:{metro:'M3 hattı var — deniz otobüsü planlanıyor',donusum:'Nispeten yeni yapı stoku — %8 dönüşüm'},
+    bahcelievler:{metro:'M1 hattı aktif — bağlantı güçlü',donusum:'Orta düzey dönüşüm — %22 yenilenme'},
+    sariyer:{metro:'Planlanan bağlantı yok — minibüs ağırlıklı',donusum:'Sınırlı dönüşüm — doğal sit alanları kısıtlıyor'},
+    zeytinburnu:{metro:'T1 tramvay ve Marmaray aktif — çok güçlü',donusum:'Aktif dönüşüm — 2.000 konutluk proje onaylandı'}
+  },
+  ankara:{
+    cankaya:{metro:'Ankaray ve metro hattı mevcut — merkezi bağlantı',donusum:'Kısmi dönüşüm — sit alanları kısıtlıyor'},
+    kecioren:{metro:'Keçiören metrosu aktif — Batıkent uzatma planı',donusum:'TOKİ projesi — 3.200 konut planlandı'},
+    mamak:{metro:'Metro bağlantısı yok — otobüs ağırlıklı',donusum:'Aktif dönüşüm — 5.000 konut hedefi'},
+    etimesgut:{metro:'Etimesgut metro hattı aktif — yeni istasyonlar ekleniyor',donusum:'Büyük ölçekli yeni yapılaşma hâkim'},
+    yenimahalle:{metro:'Metro hattı mevcut — güzergah genişliyor',donusum:'Orta düzey dönüşüm — %25 yenilenme'},
+    sincan:{metro:'Sincan–Ankara hızlı tren planlanıyor',donusum:'Yeni yapılaşma ağırlıklı — %10 dönüşüm'},
+    altindag:{metro:'Ankaray güzergahında — bağlantı orta düzey',donusum:'Kısmi dönüşüm — çevre düzenlemesi devam ediyor'},
+    pursaklar:{metro:'Metro uzatma projesi Meclis\'te — onay bekleniyor',donusum:'Nispeten yeni yapı stoku — az dönüşüm'},
+    golbasi:{metro:'Metro bağlantısı yok — OHO güzergahı var',donusum:'Göl çevresi projeleri — sınırlı dönüşüm'}
+  },
+  izmir:{
+    konak:{metro:'İZBAN ve metro hattı aktif — güçlü bağlantı',donusum:'Tarihi alan kısıtlaması — kısıtlı dönüşüm'},
+    karsiyaka:{metro:'İZBAN aktif — yeni metro istasyonu ekleniyor',donusum:'Seçili bölgelerde kısmi yenileme'},
+    bornova:{metro:'Metro hattı mevcut — Evka uzatması planlandı',donusum:'Teknoloji bölgesi geliştirmesi var'},
+    buca:{metro:'Metro güzergahı açıklandı — yapım aşamasında',donusum:'TOKİ projesi — 5.000 konut onaylandı'},
+    bayrakli:{metro:'Metro aktif — havalimanı uzatması planlandı',donusum:'Bayraklı Yeni Merkez — 4. etap devam ediyor'},
+    cigli:{metro:'Planlanan metro yok — OSB ulaşım ağı',donusum:'OSB genişlemesi — yeni yapılaşma ağırlıklı'},
+    gaziemir:{metro:'Havalimanı yakınlığı avantajı — bağlantı orta',donusum:'Serbest ticaret bölgesi kuruluyor'},
+    balcova:{metro:'Metro bağlantısı yok — otobüs ağırlıklı',donusum:'Termal tesis genişlemesi planlandı'},
+    narlidere:{metro:'İZBAN yeni durak ekleniyor',donusum:'Marina projesi başvurusu yapıldı'}
+  },
+  bursa:{
+    nilufer:{metro:'Bursaray uzatma — fizibilite aşamasında',donusum:'Yeni lüks proje ihale edildi — az dönüşüm'},
+    osmangazi:{metro:'Bursaray hattı mevcut — yeni durak ekleniyor',donusum:'Çarşı yenileme 2. etapta — %15 yenilenme'},
+    yildirim:{metro:'Metro bağlantısı sınırlı — otobüs ağırlıklı',donusum:'Aktif dönüşüm — 2.000 konut yenileniyor'},
+    gorukle:{metro:'Bursaray bağlantısı yok — üniversite ring servisi',donusum:'Yurt ve konut projeleri yoğunlaşıyor'},
+    mudanya:{metro:'Deniz otobüsü bağlantısı güçlü — İstanbul hattı var',donusum:'Sahil imarı onaylandı — yeni projeler'}
+  },
+  antalya:{
+    muratpasa:{metro:'Tramvay hattı güzergahı açıklandı — yapım planlandı',donusum:'Sahil bandı yenileme devam ediyor'},
+    kepez:{metro:'Toplu ulaşım ağırlıklı — metro planı yok',donusum:'TOKİ — 3.500 konut başlıyor'},
+    konyaalti:{metro:'Metro 2028\'de tamamlanacak — güzergah onaylı',donusum:'Turizm yatırımları hâkim — az konut dönüşümü'},
+    dosemealti:{metro:'Bağlantı yolu genişletme çalışması devam ediyor',donusum:'Villa projeleri yoğunlaşıyor — az dönüşüm'},
+    alanya:{metro:'Alanya–Antalya otoyol projesi planlandı',donusum:'10.000 konutluk yeni yapılaşma bölgesi açıldı'},
+    manavgat:{metro:'Manavgat–Alanya bağlantısı ihaleye çıktı',donusum:'Turizm yatırımları ağırlıklı — konut dönüşümü az'}
+  }
+};
+
+// Brüt kira getiri oranı (oda tipine göre temel %)
+const KIRA_GETIRI_BASE = {
+  '1+1':5.8,'2+1':4.9,'3+1':4.2,'4+1':3.7,'villa':3.1,'mustakil':3.6
+};
+
+// Bölgeye göre getiri çarpanı (lokasyon primi)
+const KIRA_BOLGE_CARP = {
+  istanbul:{atasehir:1.05,kadikoy:0.88,besiktas:0.82,sisli:0.90,uskudar:1.02,
+    maltepe:1.08,pendik:1.12,umraniye:1.10,kartal:1.10,bagcilar:1.15,
+    esenyurt:1.20,beylikduzu:1.08,bahcelievler:1.05,sariyer:0.85,zeytinburnu:1.00},
+  ankara:{cankaya:0.92,kecioren:1.10,mamak:1.15,etimesgut:1.05,
+    yenimahalle:1.08,sincan:1.18,altindag:1.20,pursaklar:1.12,golbasi:0.95},
+  izmir:{konak:0.95,karsiyaka:0.98,bornova:1.05,buca:1.08,
+    bayrakli:1.00,cigli:1.10,gaziemir:1.05,balcova:0.90,narlidere:0.92},
+  bursa:{nilufer:0.98,osmangazi:1.05,yildirim:1.12,gorukle:1.08,mudanya:0.88},
+  antalya:{muratpasa:0.92,kepez:1.05,konyaalti:0.85,dosemealti:0.95,alanya:0.80,manavgat:0.88}
+};
+
+function updateBolgeInfo(){
+  const city=S.city, dist=S.district;
+  const info=BOLGE_INFO[city]?.[dist];
+  if(!info){
+    document.getElementById('rbMetro').textContent='Bilgi mevcut değil';
+    document.getElementById('rbDonusum').textContent='Bilgi mevcut değil';
+    document.getElementById('rbIvme').textContent='—';
+    return;
+  }
+  document.getElementById('rbMetro').textContent=info.metro;
+  document.getElementById('rbDonusum').textContent=info.donusum;
+  // Fiyat ivmesi: son 3 ay ortalaması vs önceki 3 ay ortalaması
+  const raw=generateRaw(city,dist,S.room);
+  const last3=raw.slice(-3).map(p=>p.total);
+  const prev3=raw.slice(-6,-3).map(p=>p.total);
+  const avg3=last3.reduce((a,b)=>a+b)/3;
+  const avp3=prev3.reduce((a,b)=>a+b)/3;
+  const ivme=((avg3-avp3)/avp3*100).toFixed(1);
+  const pos=parseFloat(ivme)>=0;
+  const col=pos?'var(--green)':'var(--red)';
+  const sign=pos?'▲ +':'▼ ';
+  document.getElementById('rbIvme').innerHTML=`<span style="color:${col};font-weight:700">${sign}${ivme}%</span> &nbsp;<span style="color:var(--t3)">(son 3 ay ort. karşılaştırması)</span>`;
+}
+
+function updateKiraGetiri(currentTotalPrice){
+  const base=KIRA_GETIRI_BASE[S.room]??4.2;
+  const carp=(KIRA_BOLGE_CARP[S.city]??{})[S.district]??1.0;
+  const rate=parseFloat((base*carp).toFixed(1));
+  const yillikKira=Math.round(currentTotalPrice*rate/100);
+  const aylikKira=Math.round(yillikKira/12);
+  document.getElementById('stRent').textContent='%'+rate;
+  document.getElementById('stRentSub').textContent='≈ ₺'+aylikKira.toLocaleString('tr-TR')+'/ay brüt';
+}
+
+// ════════════════════════════════════════════════
+// BÜTÇE MODALİ FONKSİYONLARI
+// ════════════════════════════════════════════════
+function openBudgetModal(){
+  document.getElementById('budgetResults').innerHTML='<div class="bm-empty">Yukarıya bütçenizi girin ve <strong>Ara</strong> butonuna tıklayın</div>';
+  document.getElementById('budgetInput').value='';
+  document.getElementById('budgetOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('budgetInput').focus(),120);
+}
+
+function closeBudgetModal(){
+  document.getElementById('budgetOverlay').classList.remove('show');
+}
+
+function budgetOverlayClick(e){
+  if(e.target===document.getElementById('budgetOverlay')) closeBudgetModal();
+}
+
+function searchBudget(){
+  const budget=parseFloat(document.getElementById('budgetInput').value);
+  const el=document.getElementById('budgetResults');
+  if(!budget||isNaN(budget)||budget<=0){
+    el.innerHTML='<div class="bm-empty">Lütfen geçerli bir bütçe miktarı girin</div>';
+    return;
+  }
+  const city=S.city;
+  const room=S.room;
+  const cityData=CITIES[city];
+  const results=[];
+  Object.entries(cityData.districts).forEach(([dKey,dVal])=>{
+    const raw=generateRaw(city,dKey,room);
+    const lastPt=raw.at(-1);
+    const price=lastPt.total;
+    if(price<=budget) results.push({key:dKey,name:dVal.n,price,m2:lastPt.m2});
+  });
+  // Bütçeyi en iyi kullananlar önce (en yüksek fiyatlı ama bütçe altı)
+  results.sort((a,b)=>b.price-a.price);
+  const top5=results.slice(0,5);
+  if(!top5.length){
+    el.innerHTML=`<div class="bm-empty">Seçili şehirde <strong>${budget.toLocaleString('tr-TR')} ₺</strong> bütçeyle ${room} daire bulunamadı.<br><span style="color:var(--t3);font-size:11px">Farklı bir şehir veya oda tipi seçip tekrar deneyin.</span></div>`;
+    return;
+  }
+  const rankCls=(i)=>i===0?'gold':i===1?'silver':i===2?'bronze':'';
+  el.innerHTML=top5.map((r,i)=>`
+    <div class="bm-row">
+      <div class="bm-rank ${rankCls(i)}">${i+1}</div>
+      <div class="bm-dist">
+        <div class="bm-dist-name">${r.name}</div>
+        <div class="bm-dist-city">${cityData.name} · ${room} Daire</div>
+      </div>
+      <div class="bm-price">
+        <div class="bm-price-val">${fmt(r.price,'tl')}</div>
+        <div class="bm-price-lbl">₺${r.m2.toLocaleString('tr-TR')}/m²</div>
+      </div>
+    </div>`).join('');
 }
 </script>
 </body>
