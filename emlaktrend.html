@@ -159,6 +159,75 @@
       .stats{grid-template-columns:1fr 1fr}
       .card-val{font-size:15px}
     }
+
+    /* ── NAV TABS ── */
+    .nav-tabs{display:flex;gap:2px;background:var(--bg4);border-radius:8px;padding:3px}
+    .nt{padding:5px 15px;font-size:13px;font-weight:600;background:none;border:none;border-radius:6px;color:var(--t2);cursor:pointer;transition:all .15s;white-space:nowrap}
+    .nt.on{background:var(--bg2);color:var(--t1);box-shadow:0 1px 3px rgba(0,0,0,.35)}
+    .nt:hover:not(.on){color:var(--t1)}
+
+    /* ── RADAR PANEL ── */
+    #analyzPanel,#radarPanel{display:flex;flex-direction:column;gap:14px;width:100%}
+    #radarPanel{display:none}
+    .radar-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .rs-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+    .rs-card:hover{border-color:var(--accent)}
+    .rs-icon{font-size:24px;flex-shrink:0}
+    .rs-val{font-size:22px;font-weight:800;line-height:1}
+    .rs-lbl{font-size:11px;color:var(--t2);margin-top:3px;line-height:1.4}
+    .rs-sub{font-size:10px;color:var(--t3)}
+    .radar-cities{display:flex;flex-direction:column;gap:12px}
+    .rc-sec{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+    .rc-hdr{padding:12px 16px;border-bottom:1px solid var(--border);font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+    .rc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;padding:14px}
+
+    /* district cards */
+    .dc{background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .15s;position:relative;overflow:hidden}
+    .dc::before{content:'';position:absolute;inset:0;opacity:.07;pointer-events:none;transition:opacity .2s}
+    .dc.hcrit::before{background:#ef4444}.dc.hhigh::before{background:#f97316}
+    .dc.hmed::before{background:#eab308}.dc.hlow::before{background:#22c55e}
+    .dc:hover{border-color:var(--accent2);transform:translateY(-2px);box-shadow:0 5px 16px rgba(0,0,0,.35)}
+    .dc:hover::before{opacity:.15}
+    .dc-name{font-size:13px;font-weight:700;margin-bottom:8px;color:var(--t1)}
+    .dc-badges{display:flex;gap:5px;flex-wrap:wrap}
+    .dcb{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap}
+    .bhot{background:rgba(239,68,68,.2);color:#f87171}
+    .bwarm{background:rgba(249,115,22,.2);color:#fb923c}
+    .bmild{background:rgba(234,179,8,.2);color:#fbbf24}
+    .bcool{background:rgba(34,197,94,.2);color:#4ade80}
+    .blup{background:rgba(59,130,246,.2);color:#60a5fa}
+    .bldn{background:rgba(107,114,128,.2);color:#9ca3af}
+    .dc-hint{font-size:10px;color:var(--t3);margin-top:7px;display:flex;align-items:center;gap:3px}
+
+    /* ── RADAR MODAL ── */
+    .rm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;display:none;backdrop-filter:blur(2px)}
+    .rm-overlay.show{display:block}
+    .rm-panel{position:fixed;top:56px;right:0;width:420px;max-width:100vw;height:calc(100vh - 56px);background:var(--bg2);border-left:1px solid var(--border);z-index:301;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
+    .rm-panel.open{transform:translateX(0)}
+    .rm-panel::-webkit-scrollbar{width:4px}
+    .rm-panel::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+    .rm-hdr{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;position:sticky;top:0;background:var(--bg2);z-index:1}
+    .rm-close{background:none;border:none;color:var(--t2);cursor:pointer;font-size:22px;line-height:1;padding:2px 6px;border-radius:5px;flex-shrink:0}
+    .rm-close:hover{color:var(--t1);background:var(--bg4)}
+    .rm-title{font-size:18px;font-weight:700}
+    .rm-sub{font-size:12px;color:var(--t2);margin-top:3px}
+    .rm-heat-bar{height:4px;margin:0 16px 16px;border-radius:2px}
+    .rm-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px}
+    .rm-stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px}
+    .rm-stat-val{font-size:21px;font-weight:800}
+    .rm-stat-lbl{font-size:10px;color:var(--t2);margin-top:3px;line-height:1.5}
+    .rm-news-sec{padding:0 16px 20px}
+    .rm-news-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3);margin-bottom:10px}
+    .rm-news-list{display:flex;flex-direction:column;gap:8px}
+    .rm-ni{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;transition:border-color .15s}
+    .rm-ni:hover{border-color:var(--accent)}
+    .rm-ni-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(31,111,235,.2);color:var(--accent2);display:inline-block;margin-bottom:6px}
+    .rm-ni-title{font-size:13px;line-height:1.55;color:var(--t1)}
+    .rm-ni-date{font-size:11px;color:var(--t3);margin-top:5px}
+
+    @media(max-width:900px){.radar-sum{grid-template-columns:1fr 1fr}}
+    @media(max-width:700px){.rm-panel{width:100vw}.radar-sum{grid-template-columns:1fr 1fr}}
+    @media(max-width:480px){.radar-sum{grid-template-columns:1fr}.rc-grid{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <body>
@@ -175,6 +244,10 @@
       <div class="logo-icon">📈</div>
       EmlakTrend
     </a>
+  </div>
+  <div class="nav-tabs">
+    <button class="nt on" id="ntAnaliz" onclick="switchView('analiz')">📈 Analiz</button>
+    <button class="nt" id="ntRadar" onclick="switchView('radar')">🎯 Radar</button>
   </div>
   <div class="hdr-right">
     <span class="live-dot"></span>
@@ -283,6 +356,9 @@
   <!-- MAIN -->
   <main class="main">
 
+  <!-- ── ANALİZ PANELİ ── -->
+  <div id="analyzPanel">
+
     <!-- Ticker Bar -->
     <div class="ticker">
       <div>
@@ -363,7 +439,40 @@
     </div>
 
     <div class="fnote">⚠️ Bu platform demo amaçlıdır. Gösterilen tüm fiyat verileri yapay zeka tarafından simüle edilmiştir — gerçek piyasa verisi yansıtmamaktadır.</div>
+
+  </div><!-- /analyzPanel -->
+
+  <!-- ── RADAR PANELİ ── -->
+  <div id="radarPanel">
+
+    <!-- Özet Kartlar -->
+    <div class="radar-sum" id="radarSummary"></div>
+
+    <!-- Şehir Izgaraları -->
+    <div class="radar-cities" id="radarCities"></div>
+
+    <div class="fnote">⚠️ Radar verileri simüle edilmiştir. Haber başlıkları temsili niteliktedir, gerçek haber kaynağına işaret etmemektedir.</div>
+  </div><!-- /radarPanel -->
+
   </main>
+</div>
+
+<!-- ── RADAR SLIDE-IN MODAL ── -->
+<div class="rm-overlay" id="rmOverlay" onclick="closeRadarModal()"></div>
+<div class="rm-panel" id="rmPanel">
+  <div class="rm-hdr">
+    <div>
+      <div class="rm-title" id="rmTitle">—</div>
+      <div class="rm-sub" id="rmSub">—</div>
+    </div>
+    <button class="rm-close" onclick="closeRadarModal()">×</button>
+  </div>
+  <div class="rm-heat-bar" id="rmHeatBar"></div>
+  <div class="rm-stats" id="rmStats"></div>
+  <div class="rm-news-sec">
+    <div class="rm-news-hdr">📰 Bölgeye Ait Önemli Haberler</div>
+    <div class="rm-news-list" id="rmNewsList"></div>
+  </div>
 </div>
 
 <script>
@@ -832,6 +941,373 @@ window.addEventListener('DOMContentLoaded',()=>{
   renderAlerts();
   renderChart();
 });
+
+// ════════════════════════════════════════════════
+// RADAR — VERİ
+// ════════════════════════════════════════════════
+// p  = son 3 aylık fiyat değişimi (%)
+// l  = son 3 aylık ilan adedi değişimi (%)
+// news = bölgeye ait temsili haber başlıkları
+const RD = {
+  istanbul:{
+    atasehir:{p:5.8,l:18,news:[
+      {t:'Ataşehir–Bostancı metro hattı fizibilite çalışması tamamlandı',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Ataşehir Finans Merkezi\'nde 3. etap inşaatı başladı',d:'Şub 2026',tag:'🏢 Ticaret'},
+      {t:'Kentsel dönüşüm kapsamında 850 konut yenileniyor',d:'Oca 2026',tag:'🏗️ Dönüşüm'},
+    ]},
+    kadikoy:{p:1.8,l:-3,news:[
+      {t:'Kadıköy sahil düzenlemesi tamamlandı, yeni yürüyüş yolları açıldı',d:'Mar 2026',tag:'🌊 Altyapı'},
+      {t:'Haydarpaşa Limanı dönüşüm projesi 1. etap onaylandı',d:'Şub 2026',tag:'🏛️ Proje'},
+    ]},
+    besiktas:{p:2.1,l:-6,news:[
+      {t:'Beşiktaş Barbaros Bulvarı genişletme çalışmaları başladı',d:'Şub 2026',tag:'🚗 Yol'},
+      {t:'Beşiktaş sahil Metro İstasyonu yenilendi',d:'Oca 2026',tag:'🚇 Metro'},
+    ]},
+    sisli:{p:3.2,l:8,news:[
+      {t:'Osmanbey\'de yeni ofis kulesi projesi onay aldı',d:'Mar 2026',tag:'🏢 Ticaret'},
+      {t:'Şişli\'de Nişantaşı çevre düzenlemesi ihaleye çıktı',d:'Şub 2026',tag:'🌳 Peyzaj'},
+    ]},
+    uskudar:{p:3.8,l:10,news:[
+      {t:'Üsküdar–Çekmeköy metro hattı Sancaktepe\'ye uzatılıyor',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Üsküdar sahil bandı düzenlemesi 2026\'da tamamlanacak',d:'Şub 2026',tag:'🌊 Altyapı'},
+    ]},
+    maltepe:{p:4.9,l:15,news:[
+      {t:'Maltepe\'de 2.500 konutluk TOKİ projesi açıklandı',d:'Mar 2026',tag:'🏠 TOKİ'},
+      {t:'Maltepe sahil yenileme kapsamında yeni iskele kurulacak',d:'Şub 2026',tag:'🌊 Altyapı'},
+      {t:'Maltepe–Ataşehir bağlantı yolu genişletme ihalesi yapıldı',d:'Oca 2026',tag:'🚗 Yol'},
+    ]},
+    pendik:{p:4.2,l:12,news:[
+      {t:'Pendik\'te Sabiha Gökçen metrosu güzergahı kesinleşti',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Pendik Lojistik Üssü genişleme projesi onaylandı',d:'Şub 2026',tag:'🏭 Sanayi'},
+    ]},
+    umraniye:{p:3.5,l:9,news:[
+      {t:'Ümraniye\'de yeni şehir hastanesi 2027\'de açılacak',d:'Mar 2026',tag:'🏥 Sağlık'},
+      {t:'Ümraniye OSB\'de yeni sanayi alanı planlanıyor',d:'Şub 2026',tag:'🏭 Sanayi'},
+    ]},
+    kartal:{p:3.9,l:11,news:[
+      {t:'Kartal kıyı dönüşüm projesi kapsamında 5.000 konut',d:'Mar 2026',tag:'🏗️ Dönüşüm'},
+      {t:'Kartal merkez yenileme çevre düzenlemesi tamamlandı',d:'Şub 2026',tag:'🌳 Peyzaj'},
+    ]},
+    bagcilar:{p:2.8,l:5,news:[
+      {t:'Bağcılar metrosu İkitelli\'ye uzatma projesi onaylandı',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Bağcılar\'da sağlık kampüsü inşaatı başladı',d:'Şub 2026',tag:'🏥 Sağlık'},
+    ]},
+    esenyurt:{p:6.7,l:24,news:[
+      {t:'Esenyurt–Havalimanı metro hattı 2027\'de açılacak',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Esenyurt\'ta 8.000 konutluk toplu konut projesi onaylandı',d:'Şub 2026',tag:'🏠 TOKİ'},
+      {t:'Esenyurt TEM bağlantı yolu genişletme çalışmaları başladı',d:'Oca 2026',tag:'🚗 Yol'},
+      {t:'Esenyurt\'ta yeni ilçe hastanesi ihalesi yapıldı',d:'Ara 2025',tag:'🏥 Sağlık'},
+    ]},
+    beylikduzu:{p:6.2,l:21,news:[
+      {t:'Beylikdüzü metro hattı Büyükçekmece\'ye uzatılıyor',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Beylikdüzü sahil parkı genişletme projesi tamamlandı',d:'Şub 2026',tag:'🌳 Peyzaj'},
+      {t:'Yeni toplu konut projeleriyle Beylikdüzü\'nde arz artışı bekleniyor',d:'Oca 2026',tag:'🏗️ Dönüşüm'},
+    ]},
+    bahcelievler:{p:2.4,l:3,news:[
+      {t:'Bahçelievler\'de kentsel dönüşüm kapsamında 1.100 daire yenileniyor',d:'Mar 2026',tag:'🏗️ Dönüşüm'},
+    ]},
+    sariyer:{p:2.9,l:-2,news:[
+      {t:'Sarıyer Karaburun\'da doğal sit alanı genişledi',d:'Mar 2026',tag:'🌿 Çevre'},
+      {t:'Sarıyer\'de lüks villa bölgesine yeni yol projesi',d:'Şub 2026',tag:'🚗 Yol'},
+    ]},
+    zeytinburnu:{p:5.1,l:16,news:[
+      {t:'Zeytinburnu kıyı dönüşüm projesi 3. etap ihaleye çıktı',d:'Mar 2026',tag:'🏗️ Dönüşüm'},
+      {t:'Marmaray Zeytinburnu İstasyonu çevre düzenlemesi tamamlandı',d:'Şub 2026',tag:'🚇 Metro'},
+      {t:'Zeytinburnu\'nda 2.000 konutluk kentsel dönüşüm onaylandı',d:'Oca 2026',tag:'🏗️ Dönüşüm'},
+    ]},
+  },
+  ankara:{
+    cankaya:{p:1.6,l:-4,news:[
+      {t:'Çankaya\'da sit alanı sınırları yeniden belirlendi',d:'Mar 2026',tag:'🏛️ Koruma'},
+      {t:'Kızılay Meydanı yenileme projesi 2. etap başladı',d:'Şub 2026',tag:'🌳 Peyzaj'},
+    ]},
+    kecioren:{p:3.4,l:9,news:[
+      {t:'Keçiören metrosu Batıkent\'e uzatma projesi onaylandı',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Keçiören\'de 3.200 konutluk TOKİ projesi açıklandı',d:'Şub 2026',tag:'🏠 TOKİ'},
+    ]},
+    mamak:{p:2.6,l:6,news:[
+      {t:'Mamak\'ta kentsel dönüşüm hız kazanıyor: 5.000 konut hedefi',d:'Mar 2026',tag:'🏗️ Dönüşüm'},
+      {t:'Mamak bağlantı yolu genişletme çalışmaları başladı',d:'Şub 2026',tag:'🚗 Yol'},
+    ]},
+    etimesgut:{p:5.4,l:19,news:[
+      {t:'Etimesgut–Söğütözü metro hattına yeni istasyonlar ekleniyor',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Etimesgut\'ta Ankara\'nın en büyük AVM\'si açılıyor',d:'Şub 2026',tag:'🏢 Ticaret'},
+      {t:'Etimesgut sanayi bölgesinde teknoloji parkı kuruluyor',d:'Oca 2026',tag:'🏭 Sanayi'},
+    ]},
+    yenimahalle:{p:3.8,l:10,news:[
+      {t:'Yenimahalle metro hattı güzergahı genişliyor',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Yenimahalle\'de yeni şehir hastanesi projesi başlıyor',d:'Şub 2026',tag:'🏥 Sağlık'},
+    ]},
+    sincan:{p:4.1,l:13,news:[
+      {t:'Sincan OSB 4. etap genişleme projesi onaylandı',d:'Mar 2026',tag:'🏭 Sanayi'},
+      {t:'Sincan–Ankara hızlı tren güzergahı proje aşamasında',d:'Şub 2026',tag:'🚄 Ulaşım'},
+      {t:'Sincan\'da 4.500 konutluk toplu yapı projesi onaylandı',d:'Oca 2026',tag:'🏠 TOKİ'},
+    ]},
+    altindag:{p:1.9,l:2,news:[
+      {t:'Altındağ\'da çevre düzenlemesi kapsamında yeni parklar açılıyor',d:'Mar 2026',tag:'🌳 Peyzaj'},
+    ]},
+    pursaklar:{p:4.7,l:16,news:[
+      {t:'Pursaklar\'a metro uzatma projesi Meclis\'e sunuldu',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Pursaklar\'da yeni üniversite kampüsü projesi açıklandı',d:'Şub 2026',tag:'🎓 Eğitim'},
+      {t:'Pursaklar sanayi bölgesinde 1.200 kişilik fabrika açılıyor',d:'Oca 2026',tag:'🏭 Sanayi'},
+    ]},
+    golbasi:{p:3.2,l:7,news:[
+      {t:'Gölbaşı göl çevresi turizm projesi onaylandı',d:'Mar 2026',tag:'🏖️ Turizm'},
+      {t:'Gölbaşı\'na yeni köprülü kavşak projesi başladı',d:'Şub 2026',tag:'🚗 Yol'},
+    ]},
+  },
+  izmir:{
+    konak:{p:2.2,l:-3,news:[
+      {t:'Konak sahil düzenlemesi son etap tamamlandı',d:'Mar 2026',tag:'🌊 Altyapı'},
+      {t:'Tarihi Kemeraltı çarşısı restorasyon projesi başladı',d:'Şub 2026',tag:'🏛️ Koruma'},
+    ]},
+    karsiyaka:{p:2.8,l:4,news:[
+      {t:'Karşıyaka iskelesi yenileme projesi ihaleye çıktı',d:'Mar 2026',tag:'🌊 Altyapı'},
+      {t:'Karşıyaka\'ya yeni metro istasyonu ekleniyor',d:'Şub 2026',tag:'🚇 Metro'},
+    ]},
+    bornova:{p:3.6,l:10,news:[
+      {t:'Bornova Ege Üniversitesi çevresinde yeni teknoloji bölgesi',d:'Mar 2026',tag:'🏭 Sanayi'},
+      {t:'Bornova metro hattı Evka\'ya uzatılıyor',d:'Şub 2026',tag:'🚇 Metro'},
+    ]},
+    buca:{p:3.1,l:8,news:[
+      {t:'Buca\'da 5.000 konutluk TOKİ projesi onaylandı',d:'Mar 2026',tag:'🏠 TOKİ'},
+      {t:'Buca metro hattı güzergahı açıklandı',d:'Şub 2026',tag:'🚇 Metro'},
+    ]},
+    bayrakli:{p:6.1,l:22,news:[
+      {t:'Bayraklı Yeni Merkez projesi 4. etap inşaatı başladı',d:'Mar 2026',tag:'🏗️ Dönüşüm'},
+      {t:'Bayraklı\'ya 60 katlı rezidans projesi onaylandı',d:'Şub 2026',tag:'🏢 Ticaret'},
+      {t:'Bayraklı metrosu İzmir Havalimanı\'na uzatılıyor',d:'Oca 2026',tag:'🚇 Metro'},
+    ]},
+    cigli:{p:4.3,l:14,news:[
+      {t:'Çiğli OSB genişleme kapsamında yeni fabrikalar açılıyor',d:'Mar 2026',tag:'🏭 Sanayi'},
+      {t:'Çiğli\'de 3.800 konutluk toplu yapı projesine onay',d:'Şub 2026',tag:'🏠 TOKİ'},
+    ]},
+    gaziemir:{p:5.2,l:18,news:[
+      {t:'İzmir Havalimanı 3. pist projesi Gaziemir\'i doğrudan etkiliyor',d:'Mar 2026',tag:'✈️ Havalimanı'},
+      {t:'Gaziemir\'de yeni serbest ticaret bölgesi kurulacak',d:'Şub 2026',tag:'🏭 Sanayi'},
+      {t:'Havalimanı yakını konutlara yabancı yatırımcı ilgisi arttı',d:'Oca 2026',tag:'💰 Yatırım'},
+    ]},
+    balcova:{p:2.4,l:2,news:[
+      {t:'Balçova termal tesisleri genişletme projesi onaylandı',d:'Mar 2026',tag:'🏖️ Turizm'},
+    ]},
+    narlidere:{p:2.7,l:5,news:[
+      {t:'Narlıdere\'de yeni marina projesi başvurusu yapıldı',d:'Mar 2026',tag:'🌊 Altyapı'},
+      {t:'Narlıdere\'ye İZBAN yeni durak ekleniyor',d:'Şub 2026',tag:'🚄 Ulaşım'},
+    ]},
+  },
+  bursa:{
+    nilufer:{p:4.8,l:16,news:[
+      {t:'Nilüfer\'de yeni metro hattı fizibilite çalışması başladı',d:'Mar 2026',tag:'🚇 Metro'},
+      {t:'Nilüfer OSB 5. etap onaylandı',d:'Şub 2026',tag:'🏭 Sanayi'},
+      {t:'Nilüfer\'de 4.000 konutluk lüks proje ihalesi yapıldı',d:'Oca 2026',tag:'🏠 Konut'},
+    ]},
+    osmangazi:{p:2.9,l:5,news:[
+      {t:'Osmangazi çarşı yenileme projesi 2. etapta',d:'Mar 2026',tag:'🏛️ Koruma'},
+      {t:'Bursaray hattı Osmangazi\'ye yeni durak ekleniyor',d:'Şub 2026',tag:'🚇 Metro'},
+    ]},
+    yildirim:{p:2.3,l:4,news:[
+      {t:'Yıldırım\'da kentsel dönüşüm kapsamında 2.000 konut yenileniyor',d:'Mar 2026',tag:'🏗️ Dönüşüm'},
+    ]},
+    gorukle:{p:3.7,l:9,news:[
+      {t:'Görükle Üniversite çevresinde yeni yurt ve konut projeleri',d:'Mar 2026',tag:'🎓 Eğitim'},
+      {t:'Görükle–Bursa hızlı yol projesi fizibilite aşamasında',d:'Şub 2026',tag:'🚗 Yol'},
+    ]},
+    mudanya:{p:5.6,l:19,news:[
+      {t:'Mudanya–İstanbul deniz otobüsü seferleri genişledi',d:'Mar 2026',tag:'🚢 Deniz'},
+      {t:'Mudanya sahil konut projeleri için imar revizyonu onaylandı',d:'Şub 2026',tag:'🏗️ Dönüşüm'},
+      {t:'Mudanya\'da turizm yatırımları 2025\'e göre %40 arttı',d:'Oca 2026',tag:'💰 Yatırım'},
+    ]},
+  },
+  antalya:{
+    muratpasa:{p:3.1,l:6,news:[
+      {t:'Muratpaşa sahil bandı yenileme projesi başladı',d:'Mar 2026',tag:'🌊 Altyapı'},
+      {t:'Antalya tramvay hattı Muratpaşa güzergahı açıklandı',d:'Şub 2026',tag:'🚊 Tramvay'},
+    ]},
+    kepez:{p:3.8,l:11,news:[
+      {t:'Kepez\'de yeni sanayi bölgesi açıklandı',d:'Mar 2026',tag:'🏭 Sanayi'},
+      {t:'Kepez TOKİ projesi kapsamında 3.500 konut başlıyor',d:'Şub 2026',tag:'🏠 TOKİ'},
+    ]},
+    konyaalti:{p:5.5,l:20,news:[
+      {t:'Konyaaltı sahilinde yeni 5 yıldızlı otel onaylandı',d:'Mar 2026',tag:'🏖️ Turizm'},
+      {t:'Konyaaltı metrosu 2028\'de tamamlanacak',d:'Şub 2026',tag:'🚇 Metro'},
+      {t:'Konyaaltı\'na yabancı yatırımcı ilgisi artıyor',d:'Oca 2026',tag:'💰 Yatırım'},
+    ]},
+    dosemealti:{p:4.2,l:14,news:[
+      {t:'Döşemealtı\'nda büyük ölçekli villa projeleri yoğunlaştı',d:'Mar 2026',tag:'🏠 Konut'},
+      {t:'Döşemealtı bağlantı yolu genişletme projesi onaylandı',d:'Şub 2026',tag:'🚗 Yol'},
+    ]},
+    alanya:{p:7.1,l:28,news:[
+      {t:'Alanya yabancı konut satışlarında rekor kırıldı',d:'Mar 2026',tag:'💰 Yatırım'},
+      {t:'Alanya–Antalya otoyol projesi fizibilite tamamlandı',d:'Şub 2026',tag:'🚗 Yol'},
+      {t:'Alanya havalimanı kapasitesi 2 katına çıkıyor',d:'Oca 2026',tag:'✈️ Havalimanı'},
+      {t:'Alanya\'da 10.000 konutluk yeni yapılaşma bölgesi açıldı',d:'Ara 2025',tag:'🏗️ Dönüşüm'},
+    ]},
+    manavgat:{p:5.8,l:21,news:[
+      {t:'Manavgat Side bölgesinde yoğun turizm yatırımları',d:'Mar 2026',tag:'🏖️ Turizm'},
+      {t:'Manavgat–Alanya bağlantı yolu projesi ihaleye çıktı',d:'Şub 2026',tag:'🚗 Yol'},
+      {t:'Manavgat\'ta yabancı yatırımcı sayısı 2 yılda 3 katına çıktı',d:'Oca 2026',tag:'💰 Yatırım'},
+    ]},
+  }
+};
+
+// ════════════════════════════════════════════════
+// RADAR — YARDIMCI FONKSİYONLAR
+// ════════════════════════════════════════════════
+function heatClass(p){
+  if(p>=5.5) return 'hcrit';
+  if(p>=3.5) return 'hhigh';
+  if(p>=2.0) return 'hmed';
+  return 'hlow';
+}
+function pBadgeClass(p){
+  if(p>=5.5) return 'bhot';
+  if(p>=3.5) return 'bwarm';
+  if(p>=2.0) return 'bmild';
+  return 'bcool';
+}
+function heatColor(p){
+  if(p>=5.5) return '#ef4444';
+  if(p>=3.5) return '#f97316';
+  if(p>=2.0) return '#eab308';
+  return '#22c55e';
+}
+function heatLabel(p){
+  if(p>=5.5) return 'Çok Yüksek Aktivite';
+  if(p>=3.5) return 'Yüksek Aktivite';
+  if(p>=2.0) return 'Orta Aktivite';
+  return 'Düşük Aktivite';
+}
+
+// ════════════════════════════════════════════════
+// RADAR — GÖRÜNÜM GEÇİŞİ
+// ════════════════════════════════════════════════
+function switchView(v){
+  document.getElementById('ntAnaliz').classList.toggle('on', v==='analiz');
+  document.getElementById('ntRadar').classList.toggle('on',  v==='radar');
+  document.getElementById('analyzPanel').style.display = v==='analiz' ? 'flex' : 'none';
+  document.getElementById('radarPanel').style.display  = v==='radar'  ? 'flex' : 'none';
+  if(v==='radar') renderRadar();
+}
+
+// ════════════════════════════════════════════════
+// RADAR — RENDER
+// ════════════════════════════════════════════════
+const CITY_LABELS = {
+  istanbul:'🌆 İstanbul', ankara:'🏛️ Ankara',
+  izmir:'🌊 İzmir', bursa:'🏔️ Bursa', antalya:'🏖️ Antalya'
+};
+
+function renderRadar(){
+  // Özet istatistikler
+  let hotCnt=0, listUpCnt=0, newsCnt=0;
+  Object.values(RD).forEach(city=>{
+    Object.values(city).forEach(d=>{
+      if(d.p>=3.5) hotCnt++;
+      if(d.l>5)    listUpCnt++;
+      newsCnt += d.news.length;
+    });
+  });
+
+  document.getElementById('radarSummary').innerHTML=`
+    <div class="rs-card">
+      <div class="rs-icon">🔥</div>
+      <div>
+        <div class="rs-val" style="color:#f97316">${hotCnt}</div>
+        <div class="rs-lbl">Hareketli Bölge<br><span class="rs-sub">3 aylık fiyat değişimi &gt; %3.5</span></div>
+      </div>
+    </div>
+    <div class="rs-card">
+      <div class="rs-icon">📈</div>
+      <div>
+        <div class="rs-val" style="color:#60a5fa">${listUpCnt}</div>
+        <div class="rs-lbl">İlan Artışı Var<br><span class="rs-sub">Son 3 ayda %5\'ten fazla artış</span></div>
+      </div>
+    </div>
+    <div class="rs-card">
+      <div class="rs-icon">📰</div>
+      <div>
+        <div class="rs-val" style="color:var(--green)">${newsCnt}</div>
+        <div class="rs-lbl">Kritik Haber<br><span class="rs-sub">Altyapı, dönüşüm &amp; yatırım</span></div>
+      </div>
+    </div>
+  `;
+
+  // Şehir izgaraları
+  const citiesEl = document.getElementById('radarCities');
+  citiesEl.innerHTML = '';
+
+  Object.entries(RD).forEach(([cityKey, cityData])=>{
+    const sec = document.createElement('div');
+    sec.className = 'rc-sec';
+
+    const cards = Object.entries(cityData).map(([dKey, d])=>{
+      const distName = CITIES[cityKey]?.districts[dKey]?.n || dKey;
+      const hc   = heatClass(d.p);
+      const pbc  = pBadgeClass(d.p);
+      const lbc  = d.l > 0 ? 'blup' : 'bldn';
+      const pSign = d.p > 0 ? '+' : '';
+      const lSign = d.l > 0 ? '+' : '';
+      return `
+        <div class="dc ${hc}" onclick="openRadarModal('${cityKey}','${dKey}')">
+          <div class="dc-name">${distName}</div>
+          <div class="dc-badges">
+            <span class="dcb ${pbc}">${pSign}${d.p.toFixed(1)}% Fiyat</span>
+            <span class="dcb ${lbc}">${lSign}${d.l} İlan</span>
+          </div>
+          <div class="dc-hint">📰 ${d.news.length} haber →</div>
+        </div>`;
+    }).join('');
+
+    sec.innerHTML = `
+      <div class="rc-hdr">${CITY_LABELS[cityKey]||cityKey}</div>
+      <div class="rc-grid">${cards}</div>`;
+    citiesEl.appendChild(sec);
+  });
+}
+
+// ════════════════════════════════════════════════
+// RADAR — MODAL
+// ════════════════════════════════════════════════
+function openRadarModal(cityKey, dKey){
+  const d     = RD[cityKey][dKey];
+  const dName = CITIES[cityKey]?.districts[dKey]?.n || dKey;
+  const cName = CITIES[cityKey]?.name || cityKey;
+  const col   = heatColor(d.p);
+  const pSign = d.p > 0 ? '+' : '';
+  const lSign = d.l > 0 ? '+' : '';
+
+  document.getElementById('rmTitle').textContent = dName;
+  document.getElementById('rmSub').textContent   = `${cName} · ${heatLabel(d.p)}`;
+  document.getElementById('rmHeatBar').style.background =
+    `linear-gradient(90deg, ${col} 0%, transparent 100%)`;
+
+  document.getElementById('rmStats').innerHTML = `
+    <div class="rm-stat">
+      <div class="rm-stat-val" style="color:${col}">${pSign}${d.p.toFixed(1)}%</div>
+      <div class="rm-stat-lbl">Fiyat Değişimi<br>Son 3 Ay</div>
+    </div>
+    <div class="rm-stat">
+      <div class="rm-stat-val" style="color:${d.l>0?'#60a5fa':'#9ca3af'}">${lSign}${d.l}%</div>
+      <div class="rm-stat-lbl">İlan Değişimi<br>Son 3 Ay</div>
+    </div>`;
+
+  document.getElementById('rmNewsList').innerHTML = d.news.length
+    ? d.news.map(n=>`
+        <div class="rm-ni">
+          <div class="rm-ni-tag">${n.tag}</div>
+          <div class="rm-ni-title">${n.t}</div>
+          <div class="rm-ni-date">${n.d}</div>
+        </div>`).join('')
+    : '<div style="color:var(--t3);font-size:12px;padding:4px 0">Bu bölge için kayıtlı haber bulunmuyor.</div>';
+
+  document.getElementById('rmOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('rmPanel').classList.add('open'), 10);
+}
+
+function closeRadarModal(){
+  document.getElementById('rmPanel').classList.remove('open');
+  document.getElementById('rmOverlay').classList.remove('show');
+}
 </script>
 </body>
 </html>
