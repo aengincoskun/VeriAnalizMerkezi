@@ -307,6 +307,50 @@
     .scatter-wrap{position:relative;height:360px}
     @media(max-width:900px){.fo-cards{grid-template-columns:1fr 1fr}}
     @media(max-width:600px){.fo-cards{grid-template-columns:1fr}}
+
+    /* ══ KARŞILAŞTIRMA PANELİ ══ */
+    #karsPanel{display:none;flex-direction:column;gap:14px;width:100%}
+    .kars-sel{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+    .kars-sel-hdr{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .kars-chips{display:flex;gap:8px;flex-wrap:wrap;min-height:34px;align-items:center}
+    .chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;background:var(--bg4);border:1px solid var(--accent);border-radius:20px;font-size:12px;font-weight:600;color:var(--t1)}
+    .chip-x{background:none;border:none;color:var(--t3);cursor:pointer;font-size:15px;line-height:1;padding:0 2px}
+    .chip-x:hover{color:var(--red)}
+    .kars-add{display:flex;gap:8px;margin-top:12px;align-items:center}
+    .kars-add select{flex:1;max-width:240px}
+    .kars-table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+    .kars-table{width:100%;border-collapse:collapse;font-size:13px}
+    .kars-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);padding:9px 12px;text-align:center;border-bottom:1px solid var(--border);white-space:nowrap}
+    .kars-table th:first-child{text-align:left}
+    .kars-table td{padding:10px 12px;border-bottom:1px solid rgba(48,54,61,.5);vertical-align:middle;text-align:center}
+    .kars-table td:first-child{text-align:left;font-size:11px;color:var(--t2);font-weight:700}
+    .best-cell{background:rgba(63,185,80,.14)!important;color:var(--green)!important;font-weight:800!important;border-radius:4px}
+    .kars-radar-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+    .kars-radar-wrap{position:relative;height:380px;max-width:580px;margin:0 auto}
+    .kars-empty{text-align:center;padding:40px 16px;color:var(--t2);font-size:13px;line-height:1.7}
+
+    /* ══ HESAPLAYICI PANELİ ══ */
+    #hesapPanel{display:none;flex-direction:column;gap:14px;width:100%}
+    .hesap-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .hesap-form{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:11px}
+    .hesap-results{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px}
+    .hesap-form-hdr,.hesap-res-hdr{font-size:14px;font-weight:700;margin-bottom:2px;display:flex;align-items:center;gap:7px}
+    .hf-row{display:flex;flex-direction:column;gap:5px}
+    .hf-label{font-size:11px;color:var(--t2);font-weight:600;display:flex;justify-content:space-between;align-items:center}
+    .hf-val{font-size:11px;color:var(--accent2);font-weight:700}
+    input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;height:4px;border-radius:2px}
+    input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:var(--bg4)}
+    .hr-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .hr-card{background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;align-items:flex-start;gap:9px}
+    .hr-card-icon{font-size:17px;flex-shrink:0;margin-top:2px}
+    .hr-card-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:3px}
+    .hr-card-val{font-size:16px;font-weight:800;line-height:1.1}
+    .hr-card-sub{font-size:10px;color:var(--t2);margin-top:2px}
+    .hesap-chart-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px}
+    .hesap-chart-wrap{position:relative;height:300px}
+    .hesap-divider{height:1px;background:var(--border);margin:4px 0}
+    @media(max-width:900px){.hesap-grid{grid-template-columns:1fr}.hr-cards{grid-template-columns:1fr 1fr}}
+    @media(max-width:480px){.hr-cards{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -437,8 +481,10 @@
 
   <!-- CONTENT TABS -->
   <div class="ctab-bar" id="ctabBar">
-    <button class="ctab on" id="ctFiyat" onclick="switchContentTab('fiyat')">📊 Fiyat Analizi</button>
-    <button class="ctab" id="ctFirsat" onclick="switchContentTab('firsat')">🗺️ Fırsat Haritası</button>
+    <button class="ctab on" id="ctFiyat" onclick="switchContentTab('fiyat')">&#128202; Fiyat Analizi</button>
+    <button class="ctab" id="ctFirsat" onclick="switchContentTab('firsat')">&#128506;&#65039; Fırsat Haritası</button>
+    <button class="ctab" id="ctKars" onclick="switchContentTab('kars')">&#9878;&#65039; Karşılaştır</button>
+    <button class="ctab" id="ctHesap" onclick="switchContentTab('hesap')">&#129518; Hesaplayıcı</button>
   </div>
 
     <!-- ── ANALİZ PANELİ ── -->
@@ -615,6 +661,191 @@
     <div class="fnote">⚠️ Fırsat Haritası verileri simüle edilmiştir. Yatırım kararı için profesyonel danışmanlık alınız.</div>
 
   </div><!-- /firsatPanel -->
+
+  <!-- ══ KARŞILAŞTIRMA PANELİ ══ -->
+  <div id="karsPanel">
+
+    <!-- Seçim Kartı -->
+    <div class="kars-sel">
+      <div class="kars-sel-hdr">
+        &#9878;&#65039; İlçe Seçin
+        <span style="font-size:11px;color:var(--t3);font-weight:400" id="karsCity">—</span>
+        <span style="font-size:11px;color:var(--t3);font-weight:400;margin-left:auto">Max 3 ilçe seçilebilir</span>
+      </div>
+      <div class="kars-chips" id="karsChips">
+        <span style="font-size:12px;color:var(--t3)">Henüz ilçe eklenmedi...</span>
+      </div>
+      <div class="kars-add">
+        <select class="fs" id="karsDistSel" style="max-width:240px">
+          <option value="">-- İlçe seçin --</option>
+        </select>
+        <button class="btn btn-p btn-sm" onclick="karsAddDistrict()">+ İlçe Ekle</button>
+        <button class="btn" style="background:var(--bg4);color:var(--t2);border:1px solid var(--border)" onclick="karsClear()">Temizle</button>
+      </div>
+    </div>
+
+    <!-- Karşılaştırma Tablosu -->
+    <div class="kars-table-wrap" id="karsTableWrap">
+      <div class="kars-empty" id="karsEmpty">
+        Sol panelden <strong>en az 2 ilçe</strong> ekleyerek karşılaştırma başlatabilirsiniz.<br>
+        <span style="font-size:12px;color:var(--t3)">Maksimum 3 ilçe aynı anda karşılaştırılabilir.</span>
+      </div>
+      <div id="karsTableContent" style="display:none">
+        <div style="font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px">&#128203; Yan Yana Karşılaştırma</div>
+        <div style="overflow-x:auto">
+          <table class="kars-table" id="karsTable"></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Radar Grafik -->
+    <div class="kars-radar-box" id="karsRadarBox" style="display:none">
+      <div style="font-size:13px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+        &#127860; Performans Radar Grafiği
+        <span style="font-size:11px;color:var(--t3);font-weight:400">6 eksen üzerinde ilçe karşılaştırması</span>
+      </div>
+      <div class="kars-radar-wrap"><canvas id="karsRadarChart"></canvas></div>
+    </div>
+
+    <div class="fnote">⚠️ Karşılaştırma verileri simüle edilmiştir. Yatırım kararı için uzman danışmanlık alınız.</div>
+
+  </div><!-- /karsPanel -->
+
+  <!-- ══ HESAPLAYICI PANELİ ══ -->
+  <div id="hesapPanel">
+
+    <div class="hesap-grid">
+
+      <!-- Form -->
+      <div class="hesap-form">
+        <div class="hesap-form-hdr">&#129518; Yatırım Parametreleri</div>
+
+        <div class="hf-row">
+          <label class="fl">&#127968; Şehir</label>
+          <select class="fs" id="hCity" onchange="hOnCityChange()"></select>
+        </div>
+        <div class="hf-row">
+          <label class="fl">📍 İlçe</label>
+          <select class="fs" id="hDistrict" onchange="hCalc()"></select>
+        </div>
+        <div class="hf-row">
+          <label class="fl">&#127968; Oda Tipi</label>
+          <select class="fs" id="hRoom" onchange="hCalc()">
+            <option value="1+1">1+1 Daire</option>
+            <option value="2+1">2+1 Daire</option>
+            <option value="3+1" selected>3+1 Daire</option>
+            <option value="4+1">4+1 Daire</option>
+            <option value="villa">Villa</option>
+          </select>
+        </div>
+
+        <div class="hesap-divider"></div>
+
+        <div class="hf-row">
+          <label class="fl">&#128176; Satın Alma Fiyatı (&#8378;)</label>
+          <input type="number" class="fs" id="hPrice" oninput="hCalc()" style="background-image:none;padding:7px 10px">
+        </div>
+
+        <div class="hf-row">
+          <label class="hf-label">Peşinat % <span class="hf-val" id="hDownPct">30%</span></label>
+          <input type="range" id="hDown" min="20" max="100" value="30" oninput="hCalc()">
+        </div>
+
+        <div class="hf-row">
+          <label class="hf-label">Kredi Faiz Oranı % <span class="hf-val" id="hRatePct">2.50%</span></label>
+          <input type="range" id="hRate" min="10" max="50" value="25" oninput="hCalc()">
+        </div>
+
+        <div class="hf-row">
+          <label class="fl">Vade (yıl)</label>
+          <select class="fs" id="hTerm" onchange="hCalc()">
+            <option value="10">10 Yıl</option>
+            <option value="15">15 Yıl</option>
+            <option value="20" selected>20 Yıl</option>
+            <option value="25">25 Yıl</option>
+            <option value="30">30 Yıl</option>
+          </select>
+        </div>
+
+        <div class="hesap-divider"></div>
+
+        <div class="hf-row">
+          <label class="fl">&#128176; Tahmini Aylık Kira (&#8378;)</label>
+          <input type="number" class="fs" id="hRent" oninput="hCalc()" style="background-image:none;padding:7px 10px">
+        </div>
+
+        <div class="hf-row">
+          <label class="hf-label">Yıllık Değer Artışı Tahmini % <span class="hf-val" id="hGrowthPct">8%</span></label>
+          <input type="range" id="hGrowth" min="1" max="25" value="8" oninput="hCalc()">
+        </div>
+      </div>
+
+      <!-- Sonuçlar -->
+      <div class="hesap-results">
+        <div class="hesap-res-hdr">&#128200; Hesaplama Sonuçları</div>
+        <div class="hr-cards">
+          <div class="hr-card">
+            <div class="hr-card-icon">&#128197;</div>
+            <div>
+              <div class="hr-card-lbl">Aylık Taksit</div>
+              <div class="hr-card-val" id="hrMont">&#8212;</div>
+              <div class="hr-card-sub">kredi taksiti</div>
+            </div>
+          </div>
+          <div class="hr-card">
+            <div class="hr-card-icon">&#128181;</div>
+            <div>
+              <div class="hr-card-lbl">Toplam Ödeme</div>
+              <div class="hr-card-val" id="hrTotal">&#8212;</div>
+              <div class="hr-card-sub">peşinat dahil</div>
+            </div>
+          </div>
+          <div class="hr-card">
+            <div class="hr-card-icon">&#128293;</div>
+            <div>
+              <div class="hr-card-lbl">Toplam Faiz</div>
+              <div class="hr-card-val" id="hrInterest" style="color:var(--red)">&#8212;</div>
+              <div class="hr-card-sub">kredi maliyeti</div>
+            </div>
+          </div>
+          <div class="hr-card">
+            <div class="hr-card-icon">&#9200;</div>
+            <div>
+              <div class="hr-card-lbl">Geri Dönüş Süresi</div>
+              <div class="hr-card-val" id="hrPayback" style="color:var(--yellow)">&#8212;</div>
+              <div class="hr-card-sub">amortisman</div>
+            </div>
+          </div>
+          <div class="hr-card">
+            <div class="hr-card-icon">&#127873;</div>
+            <div>
+              <div class="hr-card-lbl">10Y Kira Geliri</div>
+              <div class="hr-card-val" id="hrRentTotal" style="color:var(--purple)">&#8212;</div>
+              <div class="hr-card-sub">kümülatif tahmini</div>
+            </div>
+          </div>
+          <div class="hr-card">
+            <div class="hr-card-icon">&#128640;</div>
+            <div>
+              <div class="hr-card-lbl">Net Getiri (10Y)</div>
+              <div class="hr-card-val" id="hrNetGain" style="color:var(--green)">&#8212;</div>
+              <div class="hr-card-sub">portföy - maliyet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10Y Projeksiyon Grafiği -->
+    <div class="hesap-chart-box">
+      <div style="font-size:13px;font-weight:700;margin-bottom:4px">&#128200; 10 Yıllık Projeksiyon</div>
+      <div style="font-size:11px;color:var(--t2);margin-bottom:14px">Portföy Değeri vs. Toplam Maliyet (kümülatif)</div>
+      <div class="hesap-chart-wrap"><canvas id="hesapChart"></canvas></div>
+    </div>
+
+    <div class="fnote">⚠️ Hesaplayıcı tahmini demo verisine dayalıdır. Gerçek yatırım kararı için uzman danışmanlık alınız.</div>
+
+  </div><!-- /hesapPanel -->
 
 
   </main>
@@ -1698,18 +1929,17 @@ let currentContentTab = 'fiyat';
 
 function switchContentTab(tab){
   currentContentTab = tab;
-  const ap = document.getElementById('analyzPanel');
-  const fp = document.getElementById('firsatPanel');
-  const ctF = document.getElementById('ctFiyat');
-  const ctO = document.getElementById('ctFirsat');
-  if(tab === 'fiyat'){
-    ap.style.display = 'flex'; fp.style.display = 'none';
-    ctF.classList.add('on'); ctO.classList.remove('on');
-  } else {
-    ap.style.display = 'none'; fp.style.display = 'flex';
-    ctF.classList.remove('on'); ctO.classList.add('on');
-    renderFirsatPanel();
-  }
+  const panels = {fiyat:'analyzPanel',firsat:'firsatPanel',kars:'karsPanel',hesap:'hesapPanel'};
+  const tabs = {fiyat:'ctFiyat',firsat:'ctFirsat',kars:'ctKars',hesap:'ctHesap'};
+  Object.keys(panels).forEach(k=>{
+    const p=document.getElementById(panels[k]);
+    if(p) p.style.display = k===tab ? 'flex' : 'none';
+    const t=document.getElementById(tabs[k]);
+    if(t) t.classList.toggle('on', k===tab);
+  });
+  if(tab==='firsat') renderFirsatPanel();
+  if(tab==='kars') renderKarsPanel();
+  if(tab==='hesap') initHesap();
 }
 
 function calcDistrictData(city, room){
@@ -1879,6 +2109,281 @@ function selectDistrictFromFirsat(distKey){
   scheduleUpdate();
 }
 
+// ════════════════════════════════════════════════
+// KARŞILAŞTIR
+// ════════════════════════════════════════════════
+let selectedDistricts = [];
+let radarChartInst = null;
+
+function renderKarsPanel(){
+  const city = S.city;
+  const kCity = document.getElementById('kCity');
+  if(kCity && kCity.innerHTML === '') {
+    Object.entries(CITIES[city].districts).forEach(([k,v])=>{
+      const o = document.createElement('option');
+      o.value = k; o.textContent = v.n;
+      kCity.appendChild(o);
+    });
+  }
+  if(selectedDistricts.length === 0){
+    const dKeys = Object.keys(CITIES[city].districts);
+    selectedDistricts = dKeys.slice(0, 2);
+  }
+  renderKarsChips();
+  renderKarsTable();
+  renderRadarChart();
+}
+
+function karsAddDistrict(){
+  const sel = document.getElementById('kCity');
+  if(!sel) return;
+  const v = sel.value;
+  if(selectedDistricts.includes(v)) return;
+  if(selectedDistricts.length >= 3){ alert('En fazla 3 ilçe karşılaştırabilirsiniz.'); return; }
+  selectedDistricts.push(v);
+  renderKarsChips();
+  renderKarsTable();
+  renderRadarChart();
+}
+
+function karsRemove(k){
+  selectedDistricts = selectedDistricts.filter(d => d !== k);
+  renderKarsChips();
+  renderKarsTable();
+  renderRadarChart();
+}
+
+function renderKarsChips(){
+  const el = document.getElementById('karsChips');
+  if(!el) return;
+  const city = S.city;
+  el.innerHTML = selectedDistricts.map(k=>{
+    const n = (CITIES[city].districts[k]||{}).n || k;
+    return `<span class="kars-chip">${n}<button onclick="karsRemove('${k}')" style="background:none;border:none;color:inherit;cursor:pointer;margin-left:4px;font-size:14px;line-height:1">×</button></span>`;
+  }).join('');
+}
+
+function renderKarsTable(){
+  const el = document.getElementById('karsTableBody');
+  if(!el || selectedDistricts.length === 0) return;
+  const city = S.city, room = S.room;
+  const data = selectedDistricts.map(dk=>{
+    const raw = generateRaw(city, dk, room);
+    const last = raw[62], pt1Y = raw[50], pt3Y = raw[26];
+    const m2 = last.m2;
+    const total = last.total;
+    const chg1Y = (last.m2-pt1Y.m2)/pt1Y.m2*100;
+    const chg3Y = (last.m2-pt3Y.m2)/pt3Y.m2*100;
+    const tScore = (TRANSPORT_SCORE[city]||{})[dk]||3;
+    const base = KIRA_GETIRI_BASE[room]||4.2;
+    const carp = ((KIRA_BOLGE_CARP[city]||{})[dk])||1.0;
+    const rentYield = base * carp;
+    const donusum = (DONUSUM_LABEL[city]||{})[dk]||'Orta';
+    const prices2 = Object.keys(CITIES[city].districts).map(d=>generateRaw(city,d,room)[62].m2);
+    const minP=Math.min(...prices2), maxP=Math.max(...prices2);
+    const growths2=Object.keys(CITIES[city].districts).map(d=>(generateRaw(city,d,room)[62].m2-generateRaw(city,d,room)[50].m2)/generateRaw(city,d,room)[50].m2*100);
+    const minG=Math.min(...growths2), maxG=Math.max(...growths2);
+    const normP=maxP>minP?(m2-minP)/(maxP-minP):0.5;
+    const normG=maxG>minG?(chg1Y-minG)/(maxG-minG):0.5;
+    const oppScore=Math.round(((1-normP)*0.4+normG*0.35+(tScore/5)*0.25)*100)/10;
+    return {dk, name:(CITIES[city].districts[dk]||{}).n||dk, m2, total, chg1Y, chg3Y, rentYield, tScore, donusum, oppScore};
+  });
+  const best = (arr, fn, lo=false) => {
+    const vals = arr.map(fn);
+    const target = lo ? Math.min(...vals) : Math.max(...vals);
+    return vals.map(v => v === target);
+  };
+  const rowDefs = [
+    {lbl:'m² Fiyatı (₺)', fn:d=>'₺'+d.m2.toLocaleString('tr-TR'), best:data.map((_,i)=>best(data,d=>d.m2,true)[i])},
+    {lbl:'Toplam Fiyat', fn:d=>'₺'+d.total.toLocaleString('tr-TR'), best:data.map((_,i)=>best(data,d=>d.total,true)[i])},
+    {lbl:'1Y Değişim', fn:d=>(d.chg1Y>=0?'+':'')+d.chg1Y.toFixed(1)+'%', best:data.map((_,i)=>best(data,d=>d.chg1Y)[i])},
+    {lbl:'3Y Değişim', fn:d=>(d.chg3Y>=0?'+':'')+d.chg3Y.toFixed(1)+'%', best:data.map((_,i)=>best(data,d=>d.chg3Y)[i])},
+    {lbl:'Kira Getirisi', fn:d=>'%'+d.rentYield.toFixed(1), best:data.map((_,i)=>best(data,d=>d.rentYield)[i])},
+    {lbl:'Ulaşım Skoru', fn:d=>'⭐'.repeat(d.tScore), best:data.map((_,i)=>best(data,d=>d.tScore)[i])},
+    {lbl:'Dönüşüm Durumu', fn:d=>d.donusum, best:data.map(()=>false)},
+    {lbl:'Fırsat Skoru', fn:d=>d.oppScore+'/10', best:data.map((_,i)=>best(data,d=>d.oppScore)[i])}
+  ];
+  el.innerHTML = rowDefs.map(row=>{
+    const cells = data.map((d,i)=>{
+      const val = row.fn(d);
+      const hi = row.best[i] ? 'style="color:var(--green);font-weight:700"' : '';
+      return `<td ${hi}>${val}</td>`;
+    }).join('');
+    return `<tr><td style="font-size:11px;color:var(--t3);font-weight:600;white-space:nowrap">${row.lbl}</td>${cells}</tr>`;
+  }).join('');
+  const thead = document.getElementById('karsTableHead');
+  if(thead) thead.innerHTML = `<th style="width:140px"></th>${data.map(d=>`<th style="font-weight:700;font-size:13px">${d.name}</th>`).join('')}`;
+}
+
+function renderRadarChart(){
+  const canvas = document.getElementById('radarChart');
+  if(!canvas || selectedDistricts.length === 0) return;
+  if(radarChartInst){ radarChartInst.destroy(); radarChartInst = null; }
+  const city = S.city, room = S.room;
+  const colors = ['#3b82f6','#3fb950','#f59e0b'];
+  const labels = ['Fiyat Uygunluğu','Değer Artışı','Kira Getirisi','Ulaşım','Dön. Potansiyeli','Fırsat Skoru'];
+  const allData = Object.keys(CITIES[city].districts).map(dk=>{
+    const raw = generateRaw(city,dk,room);
+    const m2=raw[62].m2, chg1Y=(raw[62].m2-raw[50].m2)/raw[50].m2*100;
+    const tScore=(TRANSPORT_SCORE[city]||{})[dk]||3;
+    const base=KIRA_GETIRI_BASE[room]||4.2, carp=((KIRA_BOLGE_CARP[city]||{})[dk])||1.0;
+    return {dk, m2, chg1Y, tScore, rentYield:base*carp};
+  });
+  const minP=Math.min(...allData.map(d=>d.m2)), maxP=Math.max(...allData.map(d=>d.m2));
+  const minG=Math.min(...allData.map(d=>d.chg1Y)), maxG=Math.max(...allData.map(d=>d.chg1Y));
+  const minR=Math.min(...allData.map(d=>d.rentYield)), maxR=Math.max(...allData.map(d=>d.rentYield));
+  const norm=(v,min,max)=>max>min?(v-min)/(max-min)*10:5;
+  const datasets = selectedDistricts.map((dk,i)=>{
+    const d = allData.find(a=>a.dk===dk)||{};
+    const prices2=allData.map(a=>a.m2), growths2=allData.map(a=>a.chg1Y);
+    const minP2=Math.min(...prices2), maxP2=Math.max(...prices2);
+    const normP=maxP2>minP2?(d.m2-minP2)/(maxP2-minP2):0.5;
+    const normG=maxG>minG?(d.chg1Y-minG)/(maxG-minG):0.5;
+    const oppScore=Math.round(((1-normP)*0.4+normG*0.35+(d.tScore/5)*0.25)*100)/10;
+    const vals = [
+      Math.round((1-norm(d.m2,minP,maxP)/10)*10),
+      Math.round(norm(d.chg1Y,minG,maxG)),
+      Math.round(norm(d.rentYield,minR,maxR)),
+      Math.round(d.tScore*2),
+      6,
+      Math.round(oppScore)
+    ];
+    const name=(CITIES[city].districts[dk]||{}).n||dk;
+    return {
+      label:name, data:vals,
+      backgroundColor:colors[i]+'33', borderColor:colors[i],
+      borderWidth:2, pointBackgroundColor:colors[i], pointRadius:4
+    };
+  });
+  radarChartInst = new Chart(canvas.getContext('2d'),{
+    type:'radar', data:{labels,datasets},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      scales:{ r:{ min:0, max:10, ticks:{display:false,stepSize:2}, grid:{color:'rgba(48,54,61,.5)'}, angleLines:{color:'rgba(48,54,61,.5)'}, pointLabels:{color:'#8b949e',font:{size:11}} } },
+      plugins:{ legend:{ labels:{color:'#e6edf3',font:{size:12}} }, tooltip:{backgroundColor:'#1c2128',borderColor:'#30363d',borderWidth:1,titleColor:'#e6edf3',bodyColor:'#8b949e'} }
+    }
+  });
+}
+
+// ════════════════════════════════════════════════
+// HESAPLAYICI
+// ════════════════════════════════════════════════
+let hesapChartInst = null;
+let hesapInited = false;
+
+function initHesap(){
+  if(!hesapInited){
+    const hCity = document.getElementById('hCity');
+    if(hCity && hCity.innerHTML === ''){
+      Object.entries(CITIES).forEach(([k,v])=>{
+        const o=document.createElement('option'); o.value=k; o.textContent=v.name; hCity.appendChild(o);
+      });
+    }
+    hCity.value = S.city;
+    hOnCityChange();
+    hesapInited = true;
+  } else {
+    hCalc();
+  }
+}
+
+function hOnCityChange(){
+  const city = document.getElementById('hCity').value;
+  const sel = document.getElementById('hDistrict');
+  sel.innerHTML = '';
+  Object.entries(CITIES[city].districts).forEach(([k,v])=>{
+    const o=document.createElement('option'); o.value=k; o.textContent=v.n; sel.appendChild(o);
+  });
+  sel.value = Object.keys(CITIES[city].districts)[0];
+  hCalc();
+}
+
+function hCalc(){
+  const city = document.getElementById('hCity').value;
+  const dist = document.getElementById('hDistrict').value;
+  const room = document.getElementById('hRoom').value;
+  const downPct = parseInt(document.getElementById('hDown').value);
+  const annualRate = parseInt(document.getElementById('hRate').value) / 10;
+  const termYears = parseInt(document.getElementById('hTerm').value);
+  const growthPct = parseInt(document.getElementById('hGrowth').value);
+  document.getElementById('hDownPct').textContent = downPct + '%';
+  document.getElementById('hRatePct').textContent = (annualRate).toFixed(2) + '%';
+  document.getElementById('hGrowthPct').textContent = growthPct + '%';
+  const raw = generateRaw(city, dist, room);
+  const last = raw[62];
+  const autoPrice = last.total;
+  const priceInput = document.getElementById('hPrice');
+  if(!priceInput.dataset.manual || priceInput.dataset.manual === 'false') priceInput.value = autoPrice;
+  const price = parseFloat(priceInput.value) || autoPrice;
+  priceInput.dataset.manual = 'true';
+  const base=KIRA_GETIRI_BASE[room]||4.2, carp=((KIRA_BOLGE_CARP[city]||{})[dist])||1.0;
+  const rentYield = base * carp / 100;
+  const autoRent = Math.round(price * rentYield / 12 / 500) * 500;
+  const rentInput = document.getElementById('hRent');
+  if(!rentInput.dataset.manual || rentInput.dataset.manual === 'false') rentInput.value = autoRent;
+  const monthlyRent = parseFloat(rentInput.value) || autoRent;
+  rentInput.dataset.manual = 'true';
+  const downAmt = price * downPct / 100;
+  const loanAmt = price - downAmt;
+  const monthlyRate = annualRate / 100 / 12;
+  const n = termYears * 12;
+  let monthlyPayment = 0;
+  if(loanAmt > 0 && monthlyRate > 0){
+    monthlyPayment = loanAmt * monthlyRate * Math.pow(1+monthlyRate, n) / (Math.pow(1+monthlyRate, n) - 1);
+  }
+  const totalPayment = downAmt + (monthlyPayment * n);
+  const totalInterest = (monthlyPayment * n) - loanAmt;
+  const annualRent = monthlyRent * 12;
+  const g = growthPct / 100;
+  let cumRent = 0, portfolioVal = price, totalCost = downAmt;
+  let paybackYear = null;
+  const projYears = [], projPortfolio = [], projCost = [];
+  for(let y = 1; y <= 10; y++){
+    portfolioVal *= (1 + g);
+    cumRent += annualRent * Math.pow(1.05, y-1);
+    totalCost += monthlyPayment * 12;
+    const net = portfolioVal + cumRent - totalCost;
+    if(!paybackYear && net >= 0) paybackYear = y;
+    projYears.push('Yıl '+y);
+    projPortfolio.push(Math.round(portfolioVal + cumRent));
+    projCost.push(Math.round(totalCost));
+  }
+  const netGain = projPortfolio[9] - projCost[9];
+  const fmtL = v => {
+    if(v >= 1000000) return '₺'+(v/1000000).toFixed(2)+'M';
+    if(v >= 1000) return '₺'+(v/1000).toFixed(0)+'K';
+    return '₺'+Math.round(v).toLocaleString('tr-TR');
+  };
+  document.getElementById('hrMont').textContent = fmtL(monthlyPayment);
+  document.getElementById('hrTotal').textContent = fmtL(totalPayment);
+  document.getElementById('hrInterest').textContent = fmtL(totalInterest);
+  document.getElementById('hrPayback').textContent = paybackYear ? paybackYear+' yıl' : '>10 yıl';
+  document.getElementById('hrRentTotal').textContent = fmtL(cumRent);
+  document.getElementById('hrNetGain').textContent = (netGain>=0?'+':'')+fmtL(netGain);
+  document.getElementById('hrNetGain').style.color = netGain >= 0 ? 'var(--green)' : 'var(--red)';
+  const hCanvas = document.getElementById('hesapChart');
+  if(!hCanvas) return;
+  if(hesapChartInst){ hesapChartInst.destroy(); hesapChartInst = null; }
+  hesapChartInst = new Chart(hCanvas.getContext('2d'),{
+    type:'line',
+    data:{ labels:projYears, datasets:[
+      {label:'Portföy Değeri + Kira',data:projPortfolio,borderColor:'#3fb950',backgroundColor:'rgba(63,185,80,.08)',borderWidth:2,fill:true,tension:.3,pointRadius:4},
+      {label:'Toplam Maliyet',data:projCost,borderColor:'#f85149',backgroundColor:'rgba(248,81,73,.06)',borderWidth:2,fill:true,tension:.3,pointRadius:4}
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{labels:{color:'#e6edf3',font:{size:12}}}, tooltip:{backgroundColor:'#1c2128',borderColor:'#30363d',borderWidth:1,titleColor:'#e6edf3',bodyColor:'#8b949e',padding:10,callbacks:{label:c=>` ${c.dataset.label}: ${fmtL(c.raw)}`}} },
+      scales:{
+        x:{grid:{color:'rgba(48,54,61,.4)'},ticks:{color:'#6e7681',font:{size:11}}},
+        y:{grid:{color:'rgba(48,54,61,.4)'},position:'right',ticks:{color:'#6e7681',font:{size:11},callback:v=>{
+          if(v>=1000000) return (v/1000000).toFixed(1)+'M';
+          if(v>=1000) return (v/1000).toFixed(0)+'K';
+          return v;
+        }}}
+      }
+    }
+  });
+}
 
 </script>
 </body>
