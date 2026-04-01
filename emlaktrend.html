@@ -206,17 +206,12 @@
       .main{height:calc(100vh - 56px);padding:12px}
       .ticker-price{font-size:28px}
       .cwrap{height:260px}
-      .nav-tabs{gap:2px}.nt{padding:6px 12px;font-size:12px}
     }
     @media(max-width:480px){
       .stats{grid-template-columns:1fr 1fr}
       .card-val{font-size:15px}
     }
 
-    /* ── NAV TABS ── */
-    .nav-tabs{display:flex;gap:4px;background:var(--bg4);border-radius:9px;padding:4px;border:1px solid var(--border)}
-    .nt{padding:7px 18px;font-size:13px;font-weight:600;background:none;border:none;border-radius:6px;color:var(--t2);cursor:pointer;transition:all .15s;white-space:nowrap;letter-spacing:.01em}
-    .nt.on{background:var(--bg2);color:var(--t1);box-shadow:0 1px 4px rgba(0,0,0,.45);border:1px solid var(--accent)}
     .nt:hover:not(.on){color:var(--t1);background:rgba(255,255,255,.05)}
 
     /* ── RADAR PANEL ── */
@@ -476,10 +471,6 @@
       EmlakTrend
     </a>
   </div>
-  <div class="nav-tabs">
-    <button class="nt on" id="ntAnaliz" onclick="switchView('analiz')">📈 Analiz</button>
-    <button class="nt" id="ntRadar" onclick="switchView('radar')">🎯 Radar</button>
-  </div>
   <div class="hdr-right">
     <span class="live-dot"></span>
     <span>Demo Modu — Sanal Veri</span>
@@ -593,6 +584,7 @@
     <button class="ctab" id="ctFirsat" onclick="switchContentTab('firsat')">&#128506;&#65039; Fırsat Haritası</button>
     <button class="ctab" id="ctKars" onclick="switchContentTab('kars')">&#9878;&#65039; Karşılaştır</button>
     <button class="ctab" id="ctHesap" onclick="switchContentTab('hesap')">&#129518; Hesaplayıcı</button>
+    <button class="ctab" id="ctRadar" onclick="switchContentTab('radar')">&#127919; Radar</button>
   </div>
 
     <!-- ── ANALİZ PANELİ ── -->
@@ -1701,29 +1693,6 @@ function heatLabel(p){
 }
 
 // ════════════════════════════════════════════════
-// RADAR — GÖRÜNÜM GEÇİŞİ
-// ════════════════════════════════════════════════
-function switchView(v){
-  document.getElementById('ntAnaliz').classList.toggle('on', v==='analiz');
-  document.getElementById('ntRadar').classList.toggle('on',  v==='radar');
-  const isAnaliz = v === 'analiz';
-  document.getElementById('ctabBar').style.display = isAnaliz ? 'flex' : 'none';
-  if(isAnaliz){
-    if(currentContentTab === 'firsat'){
-      document.getElementById('analyzPanel').style.display = 'none';
-      document.getElementById('firsatPanel').style.display = 'flex';
-      renderFirsatPanel();
-    } else {
-      document.getElementById('analyzPanel').style.display = 'flex';
-      document.getElementById('firsatPanel').style.display = 'none';
-    }
-  } else {
-    document.getElementById('analyzPanel').style.display = 'none';
-    document.getElementById('firsatPanel').style.display = 'none';
-  }
-  document.getElementById('radarPanel').style.display = v==='radar' ? 'flex' : 'none';
-  if(v==='radar') renderRadar();
-}
 
 // ════════════════════════════════════════════════
 // RADAR — RENDER
@@ -2037,8 +2006,8 @@ let currentContentTab = 'fiyat';
 
 function switchContentTab(tab){
   currentContentTab = tab;
-  const panels = {fiyat:'analyzPanel',firsat:'firsatPanel',kars:'karsPanel',hesap:'hesapPanel'};
-  const tabs = {fiyat:'ctFiyat',firsat:'ctFirsat',kars:'ctKars',hesap:'ctHesap'};
+  const panels = {fiyat:'analyzPanel',firsat:'firsatPanel',kars:'karsPanel',hesap:'hesapPanel',radar:'radarPanel'};
+  const tabs = {fiyat:'ctFiyat',firsat:'ctFirsat',kars:'ctKars',hesap:'ctHesap',radar:'ctRadar'};
   Object.keys(panels).forEach(k=>{
     const p=document.getElementById(panels[k]);
     if(p) p.style.display = k===tab ? 'flex' : 'none';
@@ -2048,6 +2017,7 @@ function switchContentTab(tab){
   if(tab==='firsat') renderFirsatPanel();
   if(tab==='kars') renderKarsPanel();
   if(tab==='hesap') initHesap();
+  if(tab==='radar') renderRadar();
 }
 
 function calcDistrictData(city, room){
