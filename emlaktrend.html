@@ -776,7 +776,7 @@
         <span style="font-size:12px;color:var(--t3)">Henüz ilçe eklenmedi...</span>
       </div>
       <div class="kars-add">
-        <select class="fs" id="karsDistSel" style="max-width:240px">
+        <select class="fs" id="kCity" style="max-width:240px">
           <option value="">-- İlçe seçin --</option>
         </select>
         <button class="btn btn-p btn-sm" onclick="karsAddDistrict()">+ İlçe Ekle</button>
@@ -793,7 +793,7 @@
       <div id="karsTableContent" style="display:none">
         <div style="font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px">&#128203; Yan Yana Karşılaştırma</div>
         <div style="overflow-x:auto">
-          <table class="kars-table" id="karsTable"></table>
+          <table class="kars-table" id="karsTable"><thead id="karsTableHead"></thead><tbody id="karsTableBody"></tbody></table>
         </div>
       </div>
     </div>
@@ -804,7 +804,7 @@
         &#127860; Performans Radar Grafiği
         <span style="font-size:11px;color:var(--t3);font-weight:400">6 eksen üzerinde ilçe karşılaştırması</span>
       </div>
-      <div class="kars-radar-wrap"><canvas id="karsRadarChart"></canvas></div>
+      <div class="kars-radar-wrap"><canvas id="radarChart"></canvas></div>
     </div>
 
     <div class="fnote">⚠️ Karşılaştırma verileri simüle edilmiştir. Yatırım kararı için uzman danışmanlık alınız.</div>
@@ -2231,19 +2231,35 @@ function karsRemove(k){
   renderRadarChart();
 }
 
+function karsClear(){
+  selectedDistricts = [];
+  renderKarsChips();
+  renderKarsTable();
+  renderRadarChart();
+}
 function renderKarsChips(){
   const el = document.getElementById('karsChips');
   if(!el) return;
   const city = S.city;
   el.innerHTML = selectedDistricts.map(k=>{
     const n = (CITIES[city].districts[k]||{}).n || k;
-    return `<span class="kars-chip">${n}<button onclick="karsRemove('${k}')" style="background:none;border:none;color:inherit;cursor:pointer;margin-left:4px;font-size:14px;line-height:1">×</button></span>`;
+    return `<span class="chip">${n}<button onclick="karsRemove('${k}')" style="background:none;border:none;color:inherit;cursor:pointer;margin-left:4px;font-size:14px;line-height:1">×</button></span>`;
   }).join('');
 }
 
 function renderKarsTable(){
   const el = document.getElementById('karsTableBody');
-  if(!el || selectedDistricts.length === 0) return;
+  const emptyEl = document.getElementById('karsEmpty');
+  const contentEl = document.getElementById('karsTableContent');
+  if(!el) return;
+  if(selectedDistricts.length < 2){
+    if(emptyEl) emptyEl.style.display = '';
+    if(contentEl) contentEl.style.display = 'none';
+    const rb = document.getElementById('karsRadarBox'); if(rb) rb.style.display = 'none';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display = 'none';
+  if(contentEl) contentEl.style.display = '';
   const city = S.city, room = S.room;
   const data = selectedDistricts.map(dk=>{
     const raw = generateRaw(city, dk, room);
@@ -2295,7 +2311,12 @@ function renderKarsTable(){
 
 function renderRadarChart(){
   const canvas = document.getElementById('radarChart');
-  if(!canvas || selectedDistricts.length === 0) return;
+  const radarBox = document.getElementById('karsRadarBox');
+  if(!canvas || selectedDistricts.length < 2){
+    if(radarBox) radarBox.style.display = 'none';
+    return;
+  }
+  if(radarBox) radarBox.style.display = '';
   if(radarChartInst){ radarChartInst.destroy(); radarChartInst = null; }
   const city = S.city, room = S.room;
   const colors = ['#3b82f6','#3fb950','#f59e0b'];
